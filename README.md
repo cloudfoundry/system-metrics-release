@@ -1,4 +1,4 @@
-#System Metrics
+# System Metrics
 [![slack.cloudfoundry.org][slack-badge]][loggregator-slack]
 [![CI Badge][ci-badge]][ci-pipeline]
 ===================================================
@@ -14,7 +14,7 @@ A central component for scraping `system-metrics-agents` and forwarding the metr
 attempts to scrape the configured port across all vms deployed to the director. If present, this job can be configured to
 communicate with the Leadership Election Job so duplicate scrapes are avoided in an HA environment.
 
-###Leadership Election
+### Leadership Election
 A job intended to be run alongside the System Metric Scraper to allow for multiple scrapers to exist while only one is 
 scraping. 
 
