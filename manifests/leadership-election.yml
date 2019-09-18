@@ -1,0 +1,53 @@
+---
+name: leadership-election
+
+stemcells:
+- alias: default
+  os: ubuntu-trusty
+  version: latest
+
+releases:
+- name: leadership-election
+  version: latest
+
+instance_groups:
+- name: leadership-election
+  azs:
+  - z1
+  instances: 3
+  vm_type: minimal
+  stemcell: default
+  networks:
+  - name: default
+  jobs:
+  - name: leadership-election
+    release: leadership-election
+    properties:
+      port: 8080
+      metrics:
+        ca_cert: "((leadership_election_metrics_tls.ca))"
+        cert: "((leadership_election_metrics_tls.certificate))"
+        key: "((leadership_election_metrics_tls.private_key))"
+        server_name: leadership_election_metrics
+
+update:
+  canaries: 1
+  max_in_flight: 1
+  canary_watch_time: 30000-60000
+  update_watch_time: 5000-60000
+  serial: true
+
+variables:
+- name: metric_scraper_ca
+  type: certificate
+  options:
+    is_ca: true
+    common_name: metricScraperCA
+
+- name: leadership_election_metrics_tls
+  type: certificate
+  options:
+    ca: metric_scraper_ca
+    common_name: leadership_election_metrics
+    extended_key_usage:
+    - server_auth

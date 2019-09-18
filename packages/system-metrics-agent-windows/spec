@@ -1,0 +1,13 @@
+---
+name: system-metrics-agent-windows
+
+dependencies:
+- golang-1-windows
+
+files:
+- exiter.ps1
+- cmd/system-metrics-agent/**/*.go
+- pkg/**/*.go
+- vendor/**/*
+- go.mod
+- go.sum

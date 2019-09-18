@@ -1,0 +1,12 @@
+---
+name: leadership-election
+
+dependencies:
+- golang-1-linux
+
+files:
+- cmd/leadership-election/**/*.go
+- pkg/**/*.go
+- vendor/**/*
+- go.mod
+- go.sum

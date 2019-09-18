@@ -1,0 +1,51 @@
+---
+name: leadership-election
+
+templates:
+  bpm.yml.erb: config/bpm.yml
+  leadership_election_ca.crt.erb: config/certs/leadership_election_ca.crt
+  leadership_election.crt.erb: config/certs/leadership_election.crt
+  leadership_election.key.erb: config/certs/leadership_election.key
+  metrics_ca.crt.erb: config/certs/metrics_ca.crt
+  metrics.crt.erb: config/certs/metrics.crt
+  metrics.key.erb: config/certs/metrics.key
+  prom_scraper_config.yml.erb: config/prom_scraper_config.yml
+
+provides:
+- name: leader-election-agent
+  type: leader-election-agent
+  properties:
+  - port
+
+consumes:
+- name: leader-election-agent
+  type: leader-election-agent
+
+packages:
+- leadership-election
+
+properties:
+  port:
+    description: "The port the agent will listen on for HTTP requests"
+    default: 8080
+  health_port:
+    description: "The port where debug information will be served"
+    default: 6060
+  tls.ca_cert:
+    description: "TLS CA cert to verify requests to leadership election"
+  tls.cert:
+    description: "TLS certificate for leadership election"
+  tls.key:
+    description: "TLS private key for leadership election"
+
+  metrics.port:
+    description: "Port leadership election uses to serve metrics and debug information"
+    default: 14921
+  metrics.ca_cert:
+    description: "TLS CA cert to verify requests to metrics endpoint."
+  metrics.cert:
+    description: "TLS certificate for metrics server signed by the metrics CA"
+  metrics.key:
+    description: "TLS private key for metrics server signed by the metrics CA"
+  metrics.server_name:
+    description: "The server name used in the scrape configuration for the metrics endpoint"
