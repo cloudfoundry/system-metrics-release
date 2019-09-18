@@ -12,14 +12,25 @@ require (
 	github.com/go-ole/go-ole v1.2.4 // indirect
 	github.com/gogo/protobuf v1.3.0 // indirect
 	github.com/golang/protobuf v1.3.2
+	github.com/google/go-cmp v0.3.1 // indirect
+	github.com/hashicorp/go-hclog v0.9.2 // indirect
+	github.com/hashicorp/go-immutable-radix v1.1.0 // indirect
+	github.com/hashicorp/go-uuid v1.0.1 // indirect
+	github.com/hashicorp/golang-lru v0.5.3 // indirect
 	github.com/hashicorp/raft v1.1.1
 	github.com/onsi/ginkgo v1.10.1
 	github.com/onsi/gomega v1.7.0
 	github.com/prometheus/client_golang v1.1.0
 	github.com/prometheus/client_model v0.0.0-20190812154241-14fe0d1b01d4
 	github.com/prometheus/common v0.7.0
+	github.com/prometheus/procfs v0.0.5 // indirect
 	github.com/shirou/gopsutil v2.18.12+incompatible
-	golang.org/x/net v0.0.0-20190613194153-d28f0bde5980
+	github.com/stretchr/testify v1.4.0 // indirect
+	golang.org/x/net v0.0.0-20190918130420-a8b05e9114ab
+	golang.org/x/sys v0.0.0-20190916202348-b4ddaad3f8a3 // indirect
+	golang.org/x/text v0.3.2 // indirect
+	google.golang.org/genproto v0.0.0-20190916214212-f660b8655731 // indirect
 	google.golang.org/grpc v1.23.1
+	gopkg.in/check.v1 v1.0.0-20190902080502-41f04d3bba15 // indirect
 	gopkg.in/yaml.v2 v2.2.2
 )
