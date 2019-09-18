@@ -20,9 +20,9 @@
     name: loggr-system-metrics-agent
 
 - type: replace
-  path: /instance_groups/name=scheduler/jobs/name=loggr-metric-scraper?
+  path: /instance_groups/name=scheduler/jobs/name=loggr-system-metric-scraper?
   value:
-    name: loggr-metric-scraper
+    name: loggr-system-metric-scraper
     properties:
       system_metrics:
         tls:
