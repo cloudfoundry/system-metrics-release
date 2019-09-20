@@ -27,7 +27,7 @@ require (
 	github.com/shirou/gopsutil v2.18.12+incompatible
 	github.com/stretchr/testify v1.4.0 // indirect
 	golang.org/x/net v0.0.0-20190918130420-a8b05e9114ab
-	golang.org/x/sys v0.0.0-20190919044723-0c1ff786ef13 // indirect
+	golang.org/x/sys v0.0.0-20190920190810-ef0ce1748380 // indirect
 	golang.org/x/text v0.3.2 // indirect
 	google.golang.org/genproto v0.0.0-20190916214212-f660b8655731 // indirect
 	google.golang.org/grpc v1.23.1
