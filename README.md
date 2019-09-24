@@ -3,7 +3,8 @@
 [![CI Badge][ci-badge]][ci-pipeline]
 ===================================================
 
-Components required to collect system metrics from BOSH-deployed vms. 
+Components required to collect system metrics from BOSH-deployed vms.
+The architecture is described in this [diagram][system-metrics-architecture]
 
 ### System Metrics Agent
 A standalone agent to provide VM system metrics via a prometheus-scrapable endpoint. A list of metrics
@@ -19,6 +20,7 @@ A job intended to be run alongside the System Metric Scraper to allow for multip
 scraping. 
 
 [system-metrics-agent]: docs/system-metrics-agent.md
+[system-metrics-architecture]: docs/system-metrics-architecture.png
 [slack-badge]:         https://slack.cloudfoundry.org/badge.svg
 [loggregator-slack]:   https://cloudfoundry.slack.com/archives/loggregator
 [ci-badge]:            https://loggregator.ci.cf-app.com/api/v1/pipelines/loggregator/jobs/loggregator-agent-tests/badge
