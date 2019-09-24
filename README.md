@@ -4,7 +4,7 @@
 ===================================================
 
 Components required to collect system metrics from BOSH-deployed vms.
-The architecture is described in this [diagram][system-metrics-architecture]
+![system-metrics-architecture]
 
 ### System Metrics Agent
 A standalone agent to provide VM system metrics via a prometheus-scrapable endpoint. A list of metrics
