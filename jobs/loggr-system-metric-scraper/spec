@@ -49,7 +49,7 @@ properties:
 
   metrics.port:
     description: "Port the agent uses to serve metrics and debug information"
-    default: 14825
+    default: 14920
   metrics.ca_cert:
     description: "TLS CA cert to verify requests to metrics endpoint."
   metrics.cert:
