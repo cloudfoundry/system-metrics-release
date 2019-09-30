@@ -1,7 +1,7 @@
 package scraper_test
 
 import (
-	"code.cloudfoundry.org/system-metrics/internal/testhelper"
+	metricshelper "code.cloudfoundry.org/go-metric-registry/testhelpers"
 	"errors"
 	"io/ioutil"
 	"net/http"
@@ -21,14 +21,14 @@ var _ = Describe("Scraper", func() {
 	type testContext struct {
 		metricGetter  *spyMetricGetter
 		metricEmitter *spyMetricEmitter
-		metricClient  *testhelper.SpyMetricClient
+		metricClient  *metricshelper.SpyMetricsRegistry
 		scraper       *scraper.Scraper
 	}
 
 	var setup = func(targets ...scraper.Target) *testContext {
 		spyMetricGetter := newSpyMetricGetter()
 		spyMetricEmitter := newSpyMetricEmitter()
-		spyMetricClient := testhelper.NewMetricClient()
+		spyMetricClient := metricshelper.NewMetricsRegistry()
 
 		s := scraper.New(
 			func() []scraper.Target {

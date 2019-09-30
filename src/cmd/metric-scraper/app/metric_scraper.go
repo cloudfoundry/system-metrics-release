@@ -1,7 +1,7 @@
 package app
 
 import (
-	"code.cloudfoundry.org/go-loggregator/metrics"
+	metrics "code.cloudfoundry.org/go-metric-registry"
 	"code.cloudfoundry.org/tlsconfig"
 	"log"
 	"net"
@@ -22,8 +22,8 @@ type MetricScraper struct {
 }
 
 type metricsClient interface {
-	NewCounter(name string, opts ...metrics.MetricOption) metrics.Counter
-	NewGauge(name string, opts ...metrics.MetricOption) metrics.Gauge
+	NewCounter(name, helpText string, opts ...metrics.MetricOption) metrics.Counter
+	NewGauge(name, helpText string, opts ...metrics.MetricOption) metrics.Gauge
 }
 
 func NewMetricScraper(cfg Config, l *log.Logger, m metricsClient) *MetricScraper {
@@ -74,7 +74,7 @@ func (m *MetricScraper) scrape() {
 	leadershipClient := m.leadershipClient()
 	numScrapes := m.metrics.NewCounter(
 		"num_scrapes",
-		metrics.WithHelpText("Total number of scrapes performed by the metric scraper."),
+		"Total number of scrapes performed by the metric scraper.",
 	)
 	t := time.NewTicker(m.cfg.ScrapeInterval)
 	for {

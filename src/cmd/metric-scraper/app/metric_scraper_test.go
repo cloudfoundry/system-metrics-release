@@ -19,6 +19,7 @@ import (
 	. "github.com/onsi/gomega"
 	"google.golang.org/grpc"
 
+	metricshelper "code.cloudfoundry.org/go-metric-registry/testhelpers"
 	"code.cloudfoundry.org/go-loggregator/rpc/loggregator_v2"
 	"code.cloudfoundry.org/system-metrics/cmd/metric-scraper/app"
 	"code.cloudfoundry.org/system-metrics/internal/testhelper"
@@ -35,7 +36,7 @@ var _ = Describe("App", func() {
 		testLogger       = log.New(GinkgoWriter, "", log.LstdFlags)
 		leadership       *spyLeadership
 		promServer       *promServer
-		spyMetricsClient *testhelper.SpyMetricClient
+		spyMetricsClient *metricshelper.SpyMetricsRegistry
 
 		metronTestCerts        = testhelper.GenerateCerts("loggregatorCA")
 		systemMetricsTestCerts = testhelper.GenerateCerts("systemMetricsCA")
@@ -76,7 +77,7 @@ var _ = Describe("App", func() {
 				LeadershipServerAddr:   leadership.server.URL,
 			}
 
-			spyMetricsClient = testhelper.NewMetricClient()
+			spyMetricsClient = metricshelper.NewMetricsRegistry()
 		})
 
 		AfterEach(func() {
