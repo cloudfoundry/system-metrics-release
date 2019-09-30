@@ -1,0 +1,56 @@
+name: system-metrics
+version: 1.0.0
+commit_hash: 927a1fd
+uncommitted_changes: false
+jobs:
+- name: leadership-election
+  version: 693c56e83ad2fae4b62e2a056448949274d495dcd54ce968a923f9b21c0eb06c
+  fingerprint: 693c56e83ad2fae4b62e2a056448949274d495dcd54ce968a923f9b21c0eb06c
+  sha1: sha256:4341f5718f6f68df3f35656b053d44ca71ea06c8e088db6f0bfb52945bfa3a68
+- name: loggr-system-metric-scraper
+  version: 6e447b6e4a19ebac8f093b72128b9174b962fb55f291197d5572a3330af5a9c4
+  fingerprint: 6e447b6e4a19ebac8f093b72128b9174b962fb55f291197d5572a3330af5a9c4
+  sha1: sha256:4bd3b1aee68cc22543a26c19b33658ec7a43cf1ab19e428788475d88caa92ae7
+- name: loggr-system-metrics-agent
+  version: 69e993b8277bfe9ef54fa1fd5e862d5c8285ad2f947932f734001ef85b2d0765
+  fingerprint: 69e993b8277bfe9ef54fa1fd5e862d5c8285ad2f947932f734001ef85b2d0765
+  sha1: sha256:71725f2bf81ceb03220ab056540586abfb496a9b090ca65fe364b5f99ff07b46
+- name: loggr-system-metrics-agent-windows
+  version: cc3b26fd40c28ba9b8713d8995a5b03bb18270002df7aa811d21e65f26a05243
+  fingerprint: cc3b26fd40c28ba9b8713d8995a5b03bb18270002df7aa811d21e65f26a05243
+  sha1: sha256:933cc30fbf1dd18c504eb7294abe98d3eea08f692297f9a74df18c2503d26dcd
+packages:
+- name: golang-1-linux
+  version: 8ee749668a0b9a22f5219c469da869ba1cb335b21f6c78e4f5700e5f0d200620
+  fingerprint: 8ee749668a0b9a22f5219c469da869ba1cb335b21f6c78e4f5700e5f0d200620
+  sha1: sha256:6e96744cb26218b9c99c35b7dca8d3460d34bd6b742807f87edc64aaee0f30ee
+  dependencies: []
+- name: golang-1-windows
+  version: 527bd9abc9fce0f3542d58216e7d22cd0468061637c89ba272f2f915e403de6f
+  fingerprint: 527bd9abc9fce0f3542d58216e7d22cd0468061637c89ba272f2f915e403de6f
+  sha1: sha256:d96d3dadb5725f1c0bb8e31516527b2abdb009603956229eba58d23a6e06b290
+  dependencies: []
+- name: leadership-election
+  version: 0b3f645aaaad6ca291708bf0d98ace3826a4c144ccea9d1f339dced4c7bcb691
+  fingerprint: 0b3f645aaaad6ca291708bf0d98ace3826a4c144ccea9d1f339dced4c7bcb691
+  sha1: sha256:4dd7383ec5a71532e3b3bea47f118dcc74f2c1054138332a274aba0b966dd839
+  dependencies:
+  - golang-1-linux
+- name: metric-scraper
+  version: 1d70552cebb9e3b9f4d07ce60fd78bdb84f683629875e7667cd70f23b39d343b
+  fingerprint: 1d70552cebb9e3b9f4d07ce60fd78bdb84f683629875e7667cd70f23b39d343b
+  sha1: sha256:330313aaf4352ae5baf20e87518ffa310e6d64207d121e2581e712d7e010b859
+  dependencies:
+  - golang-1-linux
+- name: system-metrics-agent
+  version: a8db0e4982795cb16192a9cb0318b66ca4ca5b62f8200a53f82fb55d27a70321
+  fingerprint: a8db0e4982795cb16192a9cb0318b66ca4ca5b62f8200a53f82fb55d27a70321
+  sha1: sha256:39a868206c2de00453b41cb8cb011f81940bcfee42904d549c4ba148364ab1ee
+  dependencies:
+  - golang-1-linux
+- name: system-metrics-agent-windows
+  version: b86c4959ab21fd0ce25175673f02bbf159e53a7fe07c15a6320d2ca13ce171d0
+  fingerprint: b86c4959ab21fd0ce25175673f02bbf159e53a7fe07c15a6320d2ca13ce171d0
+  sha1: sha256:165d173001702a06593c0cce57162c316bc2d7e7368a418cd54d1c4daf14cf7e
+  dependencies:
+  - golang-1-windows
