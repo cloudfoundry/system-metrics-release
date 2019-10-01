@@ -25,11 +25,11 @@ require (
 	github.com/prometheus/client_model v0.0.0-20190812154241-14fe0d1b01d4
 	github.com/prometheus/common v0.7.0
 	github.com/prometheus/procfs v0.0.5 // indirect
-	github.com/shirou/gopsutil v2.18.12+incompatible
+	github.com/shirou/gopsutil v2.19.9+incompatible
 	github.com/square/certstrap v1.2.0 // indirect
 	github.com/stretchr/testify v1.4.0 // indirect
 	golang.org/x/net v0.0.0-20190930134127-c5a3c61f89f3
-	golang.org/x/sys v0.0.0-20190927073244-c990c680b611 // indirect
+	golang.org/x/sys v0.0.0-20191001151750-bb3f8db39f24 // indirect
 	golang.org/x/text v0.3.2 // indirect
 	google.golang.org/genproto v0.0.0-20190927181202-20e1ac93f88c // indirect
 	google.golang.org/grpc v1.24.0

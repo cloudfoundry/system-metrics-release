@@ -454,7 +454,6 @@ func (s *stubRawCollector) TimesWithContext(_ context.Context, perCPU bool) ([]c
 				Steal:     1000.0,
 				Guest:     1000.0,
 				GuestNice: 1000.0,
-				Stolen:    1000.0,
 			},
 			{
 				CPU:    "cpu2",
@@ -469,7 +468,6 @@ func (s *stubRawCollector) TimesWithContext(_ context.Context, perCPU bool) ([]c
 				Steal:     1000.0,
 				Guest:     1000.0,
 				GuestNice: 1000.0,
-				Stolen:    1000.0,
 			},
 			{
 				CPU:    "cpu3",
@@ -484,7 +482,6 @@ func (s *stubRawCollector) TimesWithContext(_ context.Context, perCPU bool) ([]c
 				Steal:     1000.0,
 				Guest:     1000.0,
 				GuestNice: 1000.0,
-				Stolen:    1000.0,
 			},
 			{
 				CPU:    "cpu4",
@@ -499,7 +496,6 @@ func (s *stubRawCollector) TimesWithContext(_ context.Context, perCPU bool) ([]c
 				Steal:     1000.0,
 				Guest:     1000.0,
 				GuestNice: 1000.0,
-				Stolen:    1000.0,
 			},
 		}, nil
 	}
@@ -517,7 +513,6 @@ func (s *stubRawCollector) TimesWithContext(_ context.Context, perCPU bool) ([]c
 			Steal:     1000.0,
 			Guest:     1000.0,
 			GuestNice: 1000.0,
-			Stolen:    1000.0,
 		},
 	}, nil
 }
