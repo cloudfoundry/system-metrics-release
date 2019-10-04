@@ -28,8 +28,8 @@ require (
 	github.com/shirou/gopsutil v2.19.9+incompatible
 	github.com/square/certstrap v1.2.0 // indirect
 	github.com/stretchr/testify v1.4.0 // indirect
-	golang.org/x/net v0.0.0-20191002035440-2ec189313ef0
-	golang.org/x/sys v0.0.0-20191002091554-b397fe3ad8ed // indirect
+	golang.org/x/net v0.0.0-20191003171128-d98b1b443823
+	golang.org/x/sys v0.0.0-20191003212358-c178f38b412c // indirect
 	golang.org/x/text v0.3.2 // indirect
 	google.golang.org/genproto v0.0.0-20191002211648-c459b9ce5143 // indirect
 	google.golang.org/grpc v1.24.0
