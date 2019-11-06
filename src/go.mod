@@ -10,6 +10,7 @@ require (
 	code.cloudfoundry.org/go-metric-registry v0.0.0-20191004164645-33b67ef0f7d1
 	code.cloudfoundry.org/tlsconfig v0.0.0-20190710180242-462f72de1106
 	github.com/StackExchange/wmi v0.0.0-20190523213315-cbe66965904d // indirect
+	github.com/armon/go-metrics v0.3.0 // indirect
 	github.com/go-ole/go-ole v1.2.4 // indirect
 	github.com/gogo/protobuf v1.3.1 // indirect
 	github.com/golang/protobuf v1.3.2
@@ -27,11 +28,13 @@ require (
 	github.com/shirou/gopsutil v2.19.10+incompatible
 	github.com/square/certstrap v1.2.0 // indirect
 	github.com/stretchr/testify v1.4.0 // indirect
+	golang.org/x/lint v0.0.0-20190313153728-d0100b6bd8b3 // indirect
 	golang.org/x/net v0.0.0-20191105084925-a882066a44e0
-	golang.org/x/sys v0.0.0-20191105142833-ac3223d80179 // indirect
+	golang.org/x/sys v0.0.0-20191105231009-c1f44814a5cd // indirect
 	golang.org/x/text v0.3.2 // indirect
+	golang.org/x/tools v0.0.0-20190524140312-2c0ae7006135 // indirect
 	google.golang.org/genproto v0.0.0-20191028173616-919d9bdd9fe6 // indirect
-	google.golang.org/grpc v1.24.0
+	google.golang.org/grpc v1.25.0
 	gopkg.in/check.v1 v1.0.0-20190902080502-41f04d3bba15 // indirect
 	gopkg.in/yaml.v2 v2.2.5
 )
