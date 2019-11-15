@@ -11,6 +11,7 @@ require (
 	code.cloudfoundry.org/tlsconfig v0.0.0-20190710180242-462f72de1106
 	github.com/StackExchange/wmi v0.0.0-20190523213315-cbe66965904d // indirect
 	github.com/armon/go-metrics v0.3.0 // indirect
+	github.com/cespare/xxhash/v2 v2.1.1 // indirect
 	github.com/go-ole/go-ole v1.2.4 // indirect
 	github.com/gogo/protobuf v1.3.1 // indirect
 	github.com/golang/protobuf v1.3.2
@@ -30,7 +31,7 @@ require (
 	github.com/stretchr/testify v1.4.0 // indirect
 	golang.org/x/lint v0.0.0-20190313153728-d0100b6bd8b3 // indirect
 	golang.org/x/net v0.0.0-20191112182307-2180aed22343
-	golang.org/x/sys v0.0.0-20191113165036-4c7a9d0fe056 // indirect
+	golang.org/x/sys v0.0.0-20191115151921-52ab43148777 // indirect
 	golang.org/x/text v0.3.2 // indirect
 	golang.org/x/tools v0.0.0-20190524140312-2c0ae7006135 // indirect
 	google.golang.org/genproto v0.0.0-20191114150713-6bbd007550de // indirect
