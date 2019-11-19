@@ -30,14 +30,14 @@ require (
 	github.com/square/certstrap v1.2.0 // indirect
 	github.com/stretchr/testify v1.4.0 // indirect
 	golang.org/x/lint v0.0.0-20190313153728-d0100b6bd8b3 // indirect
-	golang.org/x/net v0.0.0-20191118183410-d06c31c94cae
-	golang.org/x/sys v0.0.0-20191118133127-cf1e2d577169 // indirect
+	golang.org/x/net v0.0.0-20191119073136-fc4aabc6c914
+	golang.org/x/sys v0.0.0-20191119060738-e882bf8e40c2 // indirect
 	golang.org/x/text v0.3.2 // indirect
 	golang.org/x/tools v0.0.0-20190524140312-2c0ae7006135 // indirect
 	google.golang.org/genproto v0.0.0-20191115221424-83cc0476cb11 // indirect
 	google.golang.org/grpc v1.25.1
 	gopkg.in/check.v1 v1.0.0-20190902080502-41f04d3bba15 // indirect
-	gopkg.in/yaml.v2 v2.2.5
+	gopkg.in/yaml.v2 v2.2.6
 )
 
 replace golang.org/x/sys => golang.org/x/sys v0.0.0-20190801041406-cbf593c0f2f3
