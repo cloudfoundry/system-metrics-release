@@ -13,12 +13,14 @@ is available in the [docs][system-metrics-agent]
 #### Metric Scraper
 A central component for scraping `system-metrics-agents` and forwarding the metrics to the firehose. Metric Scraper
 attempts to scrape the configured port across all vms deployed to the director. If present, this job can be configured to
-communicate with the Leadership Election Job so duplicate scrapes are avoided in an HA environment.
+communicate with the Leadership Election Job so duplicate scrapes are avoided in an HA environment. The system metrics scraper
+can be found in the [system-metrics-scraper-release][system-metrics-scraper]
 
 ### Leadership Election
 A job intended to be run alongside the System Metric Scraper to allow for multiple scrapers to exist while only one is 
 scraping. 
 
+[system-metrics-scraper]: https://github.com/cloudfoundry/system-metrics-scraper-release
 [system-metrics-agent]: docs/system-metrics-agent.md
 [system-metrics-architecture]: docs/system-metrics-architecture.png
 [slack-badge]:         https://slack.cloudfoundry.org/badge.svg

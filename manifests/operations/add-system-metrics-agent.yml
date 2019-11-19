@@ -11,6 +11,7 @@
     jobs:
     - name: loggr-system-metrics-agent
       properties:
+        metrics_port: 53035
         system_metrics:
           tls:
             ca_cert: ((system_metrics.ca))
