@@ -15,7 +15,7 @@ require (
 	github.com/onsi/gomega v1.7.1
 	github.com/prometheus/client_golang v1.2.1
 	github.com/prometheus/procfs v0.0.8 // indirect
-	github.com/shirou/gopsutil v2.19.10+incompatible
+	github.com/shirou/gopsutil v2.19.11+incompatible
 	github.com/square/certstrap v1.2.0 // indirect
 	github.com/stretchr/testify v1.4.0 // indirect
 	golang.org/x/lint v0.0.0-20190313153728-d0100b6bd8b3 // indirect
