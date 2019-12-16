@@ -1,0 +1,40 @@
+name: system-metrics
+version: 2.0.6
+commit_hash: 33b59fd
+uncommitted_changes: false
+jobs:
+- name: loggr-system-metrics-agent
+  version: 77f442d84653be74db3036e2360b65792cf1228962f4e0623ed6b4806f27afa5
+  fingerprint: 77f442d84653be74db3036e2360b65792cf1228962f4e0623ed6b4806f27afa5
+  sha1: sha256:7ceea50927e6407e9be9a57b3001d407eb6fa1d6f57b6557ee0c2ed9ecb6fec7
+- name: loggr-system-metrics-agent-windows
+  version: cc3b26fd40c28ba9b8713d8995a5b03bb18270002df7aa811d21e65f26a05243
+  fingerprint: cc3b26fd40c28ba9b8713d8995a5b03bb18270002df7aa811d21e65f26a05243
+  sha1: sha256:933cc30fbf1dd18c504eb7294abe98d3eea08f692297f9a74df18c2503d26dcd
+packages:
+- name: golang-1-linux
+  version: 3f5a636273e06d4a94c6f7e7a3eee0df505a70197cc2d3f0cd567b32f4a799f5
+  fingerprint: 3f5a636273e06d4a94c6f7e7a3eee0df505a70197cc2d3f0cd567b32f4a799f5
+  sha1: sha256:737551912f720584269855bbb69933bec4dc57527f518283737f2a05f8919f9b
+  dependencies: []
+- name: golang-1-windows
+  version: 15c75b4429c8a42bc5a94a11d9a07abc218cf760fc7215f1a9c78b5d5c373d2f
+  fingerprint: 15c75b4429c8a42bc5a94a11d9a07abc218cf760fc7215f1a9c78b5d5c373d2f
+  sha1: sha256:6dc3606409378190ee4be8a17dbf39eab026db3ce68d1b1d420d7003ff9d2627
+  dependencies: []
+- name: system-metrics-agent
+  version: 96aa5bfdf72ba4e8faa7a916562c79d8c65113bdd232e3d757e03d83146bb8ad
+  fingerprint: 96aa5bfdf72ba4e8faa7a916562c79d8c65113bdd232e3d757e03d83146bb8ad
+  sha1: sha256:7134edd4793ad955e67d9383519ed0aff30276418b25d7a3134c8dd5a4a2bfa3
+  dependencies:
+  - golang-1-linux
+- name: system-metrics-agent-windows
+  version: fc4928418aae86bfcc97a3b475baec13dd959ada8e28d19aafa313f1e5f43b72
+  fingerprint: fc4928418aae86bfcc97a3b475baec13dd959ada8e28d19aafa313f1e5f43b72
+  sha1: sha256:80232ff4c6e576b0603df39a2d7b902997ae1947bdce197112e8f949866190c5
+  dependencies:
+  - golang-1-windows
+license:
+  version: b3d3a6be0a737881904a718497cb593042aa0ec56ad91b93934e395a2f9c1a3d
+  fingerprint: b3d3a6be0a737881904a718497cb593042aa0ec56ad91b93934e395a2f9c1a3d
+  sha1: sha256:2117397f6c28f12b6527c3b4f156a76f1829ffb74eae88e2639fb12ae8c9323e
