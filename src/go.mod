@@ -6,7 +6,7 @@ require (
 	code.cloudfoundry.org/go-batching v0.0.0-20171020220229-924d2a9b48ac
 	code.cloudfoundry.org/go-envstruct v1.5.0
 	code.cloudfoundry.org/go-loggregator v0.0.0-20190813173818-049b6bf8152a // pinned
-	code.cloudfoundry.org/tlsconfig v0.0.0-20191220232943-2819aba30e10
+	code.cloudfoundry.org/tlsconfig v0.0.0-20200103214402-4ae6f49cdca0
 	github.com/StackExchange/wmi v0.0.0-20190523213315-cbe66965904d // indirect
 	github.com/go-ole/go-ole v1.2.4 // indirect
 	github.com/golang/protobuf v1.3.2
@@ -15,7 +15,6 @@ require (
 	github.com/onsi/gomega v1.8.1
 	github.com/prometheus/client_golang v1.3.0
 	github.com/shirou/gopsutil v2.19.12+incompatible
-	github.com/square/certstrap v1.2.0 // indirect
 	github.com/stretchr/testify v1.4.0 // indirect
 	golang.org/x/lint v0.0.0-20190313153728-d0100b6bd8b3 // indirect
 	golang.org/x/net v0.0.0-20191209160850-c0dbc17a3553
