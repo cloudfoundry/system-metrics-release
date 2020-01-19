@@ -15,6 +15,7 @@ require (
 	github.com/onsi/ginkgo v1.11.0
 	github.com/onsi/gomega v1.8.1
 	github.com/prometheus/client_golang v1.3.0
+	github.com/prometheus/client_model v0.2.0 // indirect
 	github.com/prometheus/common v0.8.0 // indirect
 	github.com/shirou/gopsutil v2.19.12+incompatible
 	github.com/stretchr/testify v1.4.0 // indirect
