@@ -6,7 +6,7 @@ require (
 	code.cloudfoundry.org/go-batching v0.0.0-20171020220229-924d2a9b48ac
 	code.cloudfoundry.org/go-envstruct v1.5.0
 	code.cloudfoundry.org/go-loggregator v0.0.0-20190813173818-049b6bf8152a // pinned
-	code.cloudfoundry.org/tlsconfig v0.0.0-20200125003142-b5ccaa4fedfc
+	code.cloudfoundry.org/tlsconfig v0.0.0-20200131000646-bbe0f8da39b3
 	github.com/StackExchange/wmi v0.0.0-20190523213315-cbe66965904d // indirect
 	github.com/go-ole/go-ole v1.2.4 // indirect
 	github.com/golang/protobuf v1.3.3
