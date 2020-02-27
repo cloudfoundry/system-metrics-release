@@ -9,7 +9,7 @@ require (
 	code.cloudfoundry.org/tlsconfig v0.0.0-20200131000646-bbe0f8da39b3
 	github.com/StackExchange/wmi v0.0.0-20190523213315-cbe66965904d // indirect
 	github.com/go-ole/go-ole v1.2.4 // indirect
-	github.com/golang/protobuf v1.3.3
+	github.com/golang/protobuf v1.3.4
 	github.com/kr/pretty v0.2.0 // indirect
 	github.com/kr/text v0.2.0 // indirect
 	github.com/onsi/ginkgo v1.12.0
@@ -19,7 +19,7 @@ require (
 	golang.org/x/net v0.0.0-20200226121028-0de0cce0169b
 	golang.org/x/sys v0.0.0-20200223170610-d5e6a3e2c0ae // indirect
 	golang.org/x/text v0.3.2 // indirect
-	google.golang.org/genproto v0.0.0-20200225123651-fc8f55426688 // indirect
+	google.golang.org/genproto v0.0.0-20200227132054-3f1135a288c9 // indirect
 	google.golang.org/grpc v1.27.1
 	gopkg.in/yaml.v2 v2.2.8 // indirect
 )
