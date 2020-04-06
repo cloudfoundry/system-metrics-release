@@ -17,9 +17,9 @@ require (
 	github.com/prometheus/client_golang v1.5.1
 	github.com/shirou/gopsutil v2.20.3+incompatible
 	golang.org/x/net v0.0.0-20200324143707-d3edc9973b7e
-	golang.org/x/sys v0.0.0-20200331124033-c3d80250170d // indirect
+	golang.org/x/sys v0.0.0-20200406155108-e3b113bbe6a4 // indirect
 	golang.org/x/text v0.3.2 // indirect
-	google.golang.org/genproto v0.0.0-20200403120447-c50568487044 // indirect
+	google.golang.org/genproto v0.0.0-20200406120821-33397c535dc2 // indirect
 	google.golang.org/grpc v1.28.0
 	gopkg.in/yaml.v2 v2.2.8 // indirect
 )
