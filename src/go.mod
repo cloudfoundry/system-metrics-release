@@ -16,7 +16,7 @@ require (
 	github.com/onsi/gomega v1.10.1
 	github.com/prometheus/client_golang v1.6.0
 	github.com/shirou/gopsutil v2.20.4+incompatible
-	golang.org/x/net v0.0.0-20200520182314-0ba52f642ac2
+	golang.org/x/net v0.0.0-20200528225125-3c3fba18258b
 	golang.org/x/sys v0.0.0-20200523222454-059865788121 // indirect
 	google.golang.org/genproto v0.0.0-20200528191852-705c0b31589b // indirect
 	google.golang.org/grpc v1.29.1
