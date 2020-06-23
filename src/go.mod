@@ -14,12 +14,12 @@ require (
 	github.com/kr/text v0.2.0 // indirect
 	github.com/onsi/ginkgo v1.13.0
 	github.com/onsi/gomega v1.10.1
-	github.com/prometheus/client_golang v1.7.0
+	github.com/prometheus/client_golang v1.7.1
 	github.com/shirou/gopsutil v2.20.5+incompatible
 	golang.org/x/net v0.0.0-20200602114024-627f9648deb9
-	golang.org/x/sys v0.0.0-20200622182413-4b0db7f3f76b // indirect
+	golang.org/x/sys v0.0.0-20200622214017-ed371f2e16b4 // indirect
 	golang.org/x/text v0.3.3 // indirect
-	google.golang.org/genproto v0.0.0-20200622133129-d0ee0c36e670 // indirect
+	google.golang.org/genproto v0.0.0-20200623002339-fbb79eadd5eb // indirect
 	google.golang.org/grpc v1.30.0
 )
 
