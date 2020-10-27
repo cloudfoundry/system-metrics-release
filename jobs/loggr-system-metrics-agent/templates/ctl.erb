@@ -44,8 +44,12 @@ case $1 in
     ;;
 
   stop)
+    echo "$(date "+%Y/%m/%d %T") attempting to stop system-metrics-agent" >> $LOG_DIR/system-metrics-agent.stderr.log
+    exec 2>>$LOG_DIR/system-metrics-agent.stderr.log
+
     kill "$(cat $PIDFILE)"
     set +e
+      echo "$(date "+%Y/%m/%d %T") additional killall for system-metrics-agent: errors expected" >> $LOG_DIR/system-metrics-agent.stderr.log
       killall -15 system-metrics-agent
       killall -9 system-metrics-agent
       killall -2 system-metrics-agent
