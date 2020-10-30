@@ -1,3 +1,5 @@
+# this job must use monit and not bpm because changing to bpm would break disk
+# usage reporting.
 <% if p("enabled") %>
 check process system-metrics-agent
   with pidfile /var/vcap/sys/run/system-metrics-agent/system-metrics-agent.pid
