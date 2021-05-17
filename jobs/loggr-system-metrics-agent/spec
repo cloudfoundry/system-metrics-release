@@ -17,7 +17,9 @@ properties:
   metrics_port:
     description: "Port where the /metrics endpoint is served"
     default: 9100
-
+  debug_port:
+    description: "Port where the /debug endpoint is served"
+    default: 14922
   sample_interval:
     description: "How often to record the system metrics"
     default: 1m
