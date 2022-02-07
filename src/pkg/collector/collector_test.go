@@ -369,29 +369,29 @@ func (s *stubRawCollector) ProtoCountersWithContext(_ context.Context, protocols
 
 	return []net.ProtoCountersStat{
 		{
-			"udp",
-			map[string]int64{
+			Protocol: "udp",
+			Stats: map[string]int64{
 				"NoPorts":  1337,
 				"InErrors": 1338,
 			},
 		},
 		{
-			"udplite",
-			map[string]int64{
+			Protocol: "udplite",
+			Stats: map[string]int64{
 				"InErrors": 1339,
 			},
 		},
 		{
-			"tcp",
-			map[string]int64{
+			Protocol: "tcp",
+			Stats: map[string]int64{
 				"ActiveOpens": 1340,
 				"CurrEstab":   1341,
 				"RetransSegs": 1342,
 			},
 		},
 		{
-			"ip",
-			map[string]int64{
+			Protocol: "ip",
+			Stats: map[string]int64{
 				"Forwarding": 1343,
 			},
 		},
