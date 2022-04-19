@@ -18,6 +18,9 @@ properties:
   metrics_port:
     description: "Port where the /metrics endpoint is served"
     default: 9100
+  use_prom_scraper:
+    description: "Use prom scraper to scrape metrics. Set false to use the deprecated bosh-system-metrics-scraper"
+    default: false
   debug_port:
     description: "Port where the /debug endpoint is served"
     default: 14922
