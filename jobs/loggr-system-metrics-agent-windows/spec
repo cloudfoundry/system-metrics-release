@@ -19,6 +19,9 @@ properties:
     description: |
       Port where the /metrics endpoint is served
     default: 9100
+  bosh_metrics_forwarder_metrics_only:
+    description: "reduces metrics emitted only to the metrics emitted by the bosh system metrics forwarder"
+    default: false
 
   sample_interval:
     description: |

@@ -35,6 +35,7 @@ case $1 in
     JOB=<%= job %> \
     INDEX=<%= index %> \
     IP=<%= ip %> \
+    LIMITED_METRICS=<%= p('bosh_metrics_forwarder_metrics_only') %> \
     CA_CERT_PATH="/var/vcap/jobs/loggr-system-metrics-agent/config/certs/system_metrics_agent_ca.crt" \
     CERT_PATH="/var/vcap/jobs/loggr-system-metrics-agent/config/certs/system_metrics_agent.crt" \
     KEY_PATH="/var/vcap/jobs/loggr-system-metrics-agent/config/certs/system_metrics_agent.key" \

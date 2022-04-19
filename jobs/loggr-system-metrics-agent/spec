@@ -23,6 +23,9 @@ properties:
   sample_interval:
     description: "How often to record the system metrics"
     default: 1m
+  bosh_metrics_forwarder_metrics_only:
+    description: "reduces metrics emitted only to the metrics emitted by the bosh system metrics forwarder"
+    default: false
 
   system_metrics:
     tls:

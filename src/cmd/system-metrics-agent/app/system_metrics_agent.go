@@ -1,19 +1,20 @@
 package app
 
 import (
-	"code.cloudfoundry.org/system-metrics/pkg/collector"
-	"code.cloudfoundry.org/system-metrics/pkg/egress/stats"
-	"code.cloudfoundry.org/tlsconfig"
 	"context"
 	"fmt"
-	"github.com/prometheus/client_golang/prometheus"
-	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"log"
 	"net"
 	"net/http"
 	_ "net/http/pprof"
 	"sync"
 	"time"
+
+	"code.cloudfoundry.org/system-metrics/pkg/collector"
+	"code.cloudfoundry.org/system-metrics/pkg/egress/stats"
+	"code.cloudfoundry.org/tlsconfig"
+	"github.com/prometheus/client_golang/prometheus"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
 
 const statOrigin = "system_metrics_agent"
@@ -100,7 +101,7 @@ func (a *SystemMetricsAgent) startMetricsServer(addr string) {
 
 	promRegisterer := prometheus.NewRegistry()
 	promRegistry := stats.NewPromRegistry(promRegisterer)
-	promSender := stats.NewPromSender(promRegistry, statOrigin, labels)
+	promSender := stats.NewPromSender(promRegistry, statOrigin, a.cfg.LimitedMetrics, labels)
 
 	router := http.NewServeMux()
 	router.Handle("/metrics", promhttp.HandlerFor(promRegisterer, promhttp.HandlerOpts{}))
