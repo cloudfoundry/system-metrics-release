@@ -13,20 +13,22 @@ type GaugeRegistry interface {
 }
 
 type PromSender struct {
-	registry GaugeRegistry
-	origin   string
-	labels   map[string]string
+	registry       GaugeRegistry
+	origin         string
+	labels         map[string]string
+	limitedMetrics bool
 }
 
-func NewPromSender(registry GaugeRegistry, origin string, labels map[string]string) *PromSender {
+func NewPromSender(registry GaugeRegistry, origin string, limitedMetrics bool, labels map[string]string) *PromSender {
 	if labels == nil {
 		labels = make(map[string]string)
 	}
 	labels["origin"] = origin
 	return &PromSender{
-		registry: registry,
-		origin:   origin,
-		labels:   labels,
+		registry:       registry,
+		origin:         origin,
+		labels:         labels,
+		limitedMetrics: limitedMetrics,
 	}
 }
 
@@ -58,27 +60,31 @@ func (p PromSender) setSystemStats(stats collector.SystemStat) {
 	gauge = p.registry.Get("system_cpu_wait", p.origin, "Percent", labels)
 	gauge.Set(float64(stats.CPUStat.Wait))
 
-	gauge = p.registry.Get("system_cpu_idle", p.origin, "Percent", labels)
-	gauge.Set(float64(stats.CPUStat.Idle))
+	if !p.limitedMetrics {
+		gauge = p.registry.Get("system_cpu_idle", p.origin, "Percent", labels)
+		gauge.Set(float64(stats.CPUStat.Idle))
+	}
 
 	gauge = p.registry.Get("system_cpu_user", p.origin, "Percent", labels)
 	gauge.Set(float64(stats.CPUStat.User))
 
-	for _, perCoreStat := range stats.CPUCoreStats {
-		perCoreLabels := clone(p.labels)
-		perCoreLabels["cpu_name"] = perCoreStat.CPU
+	if !p.limitedMetrics {
+		for _, perCoreStat := range stats.CPUCoreStats {
+			perCoreLabels := clone(p.labels)
+			perCoreLabels["cpu_name"] = perCoreStat.CPU
 
-		gauge = p.registry.Get("system_cpu_core_sys", p.origin, "Percent", perCoreLabels)
-		gauge.Set(float64(perCoreStat.CPUStat.System))
+			gauge = p.registry.Get("system_cpu_core_sys", p.origin, "Percent", perCoreLabels)
+			gauge.Set(float64(perCoreStat.CPUStat.System))
 
-		gauge = p.registry.Get("system_cpu_core_wait", p.origin, "Percent", perCoreLabels)
-		gauge.Set(float64(perCoreStat.CPUStat.Wait))
+			gauge = p.registry.Get("system_cpu_core_wait", p.origin, "Percent", perCoreLabels)
+			gauge.Set(float64(perCoreStat.CPUStat.Wait))
 
-		gauge = p.registry.Get("system_cpu_core_idle", p.origin, "Percent", perCoreLabels)
-		gauge.Set(float64(perCoreStat.CPUStat.Idle))
+			gauge = p.registry.Get("system_cpu_core_idle", p.origin, "Percent", perCoreLabels)
+			gauge.Set(float64(perCoreStat.CPUStat.Idle))
 
-		gauge = p.registry.Get("system_cpu_core_user", p.origin, "Percent", perCoreLabels)
-		gauge.Set(float64(perCoreStat.CPUStat.User))
+			gauge = p.registry.Get("system_cpu_core_user", p.origin, "Percent", perCoreLabels)
+			gauge.Set(float64(perCoreStat.CPUStat.User))
+		}
 	}
 
 	gauge = p.registry.Get("system_mem_kb", p.origin, "KiB", labels)
@@ -96,33 +102,34 @@ func (p PromSender) setSystemStats(stats collector.SystemStat) {
 	gauge = p.registry.Get("system_load_1m", p.origin, "Load", labels)
 	gauge.Set(float64(stats.Load1M))
 
-	gauge = p.registry.Get("system_load_5m", p.origin, "Load", labels)
-	gauge.Set(float64(stats.Load5M))
+	if !p.limitedMetrics {
+		gauge = p.registry.Get("system_load_5m", p.origin, "Load", labels)
+		gauge.Set(float64(stats.Load5M))
 
-	gauge = p.registry.Get("system_load_15m", p.origin, "Load", labels)
-	gauge.Set(float64(stats.Load15M))
+		gauge = p.registry.Get("system_load_15m", p.origin, "Load", labels)
+		gauge.Set(float64(stats.Load15M))
 
-	gauge = p.registry.Get("system_network_ip_forwarding", p.origin, "", labels)
-	gauge.Set(float64(stats.ProtoCounters.IPForwarding))
+		gauge = p.registry.Get("system_network_ip_forwarding", p.origin, "", labels)
+		gauge.Set(float64(stats.ProtoCounters.IPForwarding))
 
-	gauge = p.registry.Get("system_network_udp_no_ports", p.origin, "", labels)
-	gauge.Set(float64(stats.ProtoCounters.UDPNoPorts))
+		gauge = p.registry.Get("system_network_udp_no_ports", p.origin, "", labels)
+		gauge.Set(float64(stats.ProtoCounters.UDPNoPorts))
 
-	gauge = p.registry.Get("system_network_udp_in_errors", p.origin, "", labels)
-	gauge.Set(float64(stats.ProtoCounters.UDPInErrors))
+		gauge = p.registry.Get("system_network_udp_in_errors", p.origin, "", labels)
+		gauge.Set(float64(stats.ProtoCounters.UDPInErrors))
 
-	gauge = p.registry.Get("system_network_udp_lite_in_errors", p.origin, "", labels)
-	gauge.Set(float64(stats.ProtoCounters.UDPLiteInErrors))
+		gauge = p.registry.Get("system_network_udp_lite_in_errors", p.origin, "", labels)
+		gauge.Set(float64(stats.ProtoCounters.UDPLiteInErrors))
 
-	gauge = p.registry.Get("system_network_tcp_active_opens", p.origin, "", labels)
-	gauge.Set(float64(stats.ProtoCounters.TCPActiveOpens))
+		gauge = p.registry.Get("system_network_tcp_active_opens", p.origin, "", labels)
+		gauge.Set(float64(stats.ProtoCounters.TCPActiveOpens))
 
-	gauge = p.registry.Get("system_network_tcp_curr_estab", p.origin, "", labels)
-	gauge.Set(float64(stats.ProtoCounters.TCPCurrEstab))
+		gauge = p.registry.Get("system_network_tcp_curr_estab", p.origin, "", labels)
+		gauge.Set(float64(stats.ProtoCounters.TCPCurrEstab))
 
-	gauge = p.registry.Get("system_network_tcp_retrans_segs", p.origin, "", labels)
-	gauge.Set(float64(stats.ProtoCounters.TCPRetransSegs))
-
+		gauge = p.registry.Get("system_network_tcp_retrans_segs", p.origin, "", labels)
+		gauge.Set(float64(stats.ProtoCounters.TCPRetransSegs))
+	}
 	if stats.Health.Present {
 		var healthValue float64
 		if stats.Health.Healthy {
@@ -135,6 +142,10 @@ func (p PromSender) setSystemStats(stats collector.SystemStat) {
 }
 
 func (p PromSender) setNetworkGauges(network collector.NetworkStat) {
+	if p.limitedMetrics {
+		return
+	}
+
 	labels := clone(p.labels)
 	labels["network_interface"] = network.Name
 
@@ -175,20 +186,22 @@ func (p PromSender) setSystemDiskGauges(stats collector.SystemStat) {
 	gauge = p.registry.Get("system_disk_system_inode_percent", p.origin, "Percent", labels)
 	gauge.Set(float64(stats.SystemDisk.InodePercent))
 
-	gauge = p.registry.Get("system_disk_system_read_bytes", p.origin, "Bytes", labels)
-	gauge.Set(float64(stats.SystemDisk.ReadBytes))
+	if !p.limitedMetrics {
+		gauge = p.registry.Get("system_disk_system_read_bytes", p.origin, "Bytes", labels)
+		gauge.Set(float64(stats.SystemDisk.ReadBytes))
 
-	gauge = p.registry.Get("system_disk_system_write_bytes", p.origin, "Bytes", labels)
-	gauge.Set(float64(stats.SystemDisk.WriteBytes))
+		gauge = p.registry.Get("system_disk_system_write_bytes", p.origin, "Bytes", labels)
+		gauge.Set(float64(stats.SystemDisk.WriteBytes))
 
-	gauge = p.registry.Get("system_disk_system_read_time", p.origin, "ms", labels)
-	gauge.Set(float64(stats.SystemDisk.ReadTime))
+		gauge = p.registry.Get("system_disk_system_read_time", p.origin, "ms", labels)
+		gauge.Set(float64(stats.SystemDisk.ReadTime))
 
-	gauge = p.registry.Get("system_disk_system_write_time", p.origin, "ms", labels)
-	gauge.Set(float64(stats.SystemDisk.WriteTime))
+		gauge = p.registry.Get("system_disk_system_write_time", p.origin, "ms", labels)
+		gauge.Set(float64(stats.SystemDisk.WriteTime))
 
-	gauge = p.registry.Get("system_disk_system_io_time", p.origin, "ms", labels)
-	gauge.Set(float64(stats.SystemDisk.IOTime))
+		gauge = p.registry.Get("system_disk_system_io_time", p.origin, "ms", labels)
+		gauge.Set(float64(stats.SystemDisk.IOTime))
+	}
 }
 
 func (p PromSender) setEphemeralDiskGauges(stats collector.SystemStat) {
@@ -203,20 +216,22 @@ func (p PromSender) setEphemeralDiskGauges(stats collector.SystemStat) {
 	gauge = p.registry.Get("system_disk_ephemeral_inode_percent", p.origin, "Percent", labels)
 	gauge.Set(float64(stats.EphemeralDisk.InodePercent))
 
-	gauge = p.registry.Get("system_disk_ephemeral_read_bytes", p.origin, "Bytes", labels)
-	gauge.Set(float64(stats.EphemeralDisk.ReadBytes))
+	if !p.limitedMetrics {
+		gauge = p.registry.Get("system_disk_ephemeral_read_bytes", p.origin, "Bytes", labels)
+		gauge.Set(float64(stats.EphemeralDisk.ReadBytes))
 
-	gauge = p.registry.Get("system_disk_ephemeral_write_bytes", p.origin, "Bytes", labels)
-	gauge.Set(float64(stats.EphemeralDisk.WriteBytes))
+		gauge = p.registry.Get("system_disk_ephemeral_write_bytes", p.origin, "Bytes", labels)
+		gauge.Set(float64(stats.EphemeralDisk.WriteBytes))
 
-	gauge = p.registry.Get("system_disk_ephemeral_read_time", p.origin, "ms", labels)
-	gauge.Set(float64(stats.EphemeralDisk.ReadTime))
+		gauge = p.registry.Get("system_disk_ephemeral_read_time", p.origin, "ms", labels)
+		gauge.Set(float64(stats.EphemeralDisk.ReadTime))
 
-	gauge = p.registry.Get("system_disk_ephemeral_write_time", p.origin, "ms", labels)
-	gauge.Set(float64(stats.EphemeralDisk.WriteTime))
+		gauge = p.registry.Get("system_disk_ephemeral_write_time", p.origin, "ms", labels)
+		gauge.Set(float64(stats.EphemeralDisk.WriteTime))
 
-	gauge = p.registry.Get("system_disk_ephemeral_io_time", p.origin, "ms", labels)
-	gauge.Set(float64(stats.EphemeralDisk.IOTime))
+		gauge = p.registry.Get("system_disk_ephemeral_io_time", p.origin, "ms", labels)
+		gauge.Set(float64(stats.EphemeralDisk.IOTime))
+	}
 }
 
 func (p PromSender) setPersistentDiskGauges(stats collector.SystemStat) {
@@ -231,18 +246,20 @@ func (p PromSender) setPersistentDiskGauges(stats collector.SystemStat) {
 	gauge = p.registry.Get("system_disk_persistent_inode_percent", p.origin, "Percent", labels)
 	gauge.Set(float64(stats.PersistentDisk.InodePercent))
 
-	gauge = p.registry.Get("system_disk_persistent_read_bytes", p.origin, "Bytes", labels)
-	gauge.Set(float64(stats.PersistentDisk.ReadBytes))
+	if !p.limitedMetrics {
+		gauge = p.registry.Get("system_disk_persistent_read_bytes", p.origin, "Bytes", labels)
+		gauge.Set(float64(stats.PersistentDisk.ReadBytes))
 
-	gauge = p.registry.Get("system_disk_persistent_write_bytes", p.origin, "Bytes", labels)
-	gauge.Set(float64(stats.PersistentDisk.WriteBytes))
+		gauge = p.registry.Get("system_disk_persistent_write_bytes", p.origin, "Bytes", labels)
+		gauge.Set(float64(stats.PersistentDisk.WriteBytes))
 
-	gauge = p.registry.Get("system_disk_persistent_read_time", p.origin, "ms", labels)
-	gauge.Set(float64(stats.PersistentDisk.ReadTime))
+		gauge = p.registry.Get("system_disk_persistent_read_time", p.origin, "ms", labels)
+		gauge.Set(float64(stats.PersistentDisk.ReadTime))
 
-	gauge = p.registry.Get("system_disk_persistent_write_time", p.origin, "ms", labels)
-	gauge.Set(float64(stats.PersistentDisk.WriteTime))
+		gauge = p.registry.Get("system_disk_persistent_write_time", p.origin, "ms", labels)
+		gauge.Set(float64(stats.PersistentDisk.WriteTime))
 
-	gauge = p.registry.Get("system_disk_persistent_io_time", p.origin, "ms", labels)
-	gauge.Set(float64(stats.PersistentDisk.IOTime))
+		gauge = p.registry.Get("system_disk_persistent_io_time", p.origin, "ms", labels)
+		gauge.Set(float64(stats.PersistentDisk.IOTime))
+	}
 }

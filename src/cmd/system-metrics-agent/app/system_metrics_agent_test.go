@@ -2,9 +2,11 @@ package app_test
 
 import (
 	"context"
+	"io"
 	"io/ioutil"
 	"log"
 	"net/http"
+	"strings"
 	"time"
 
 	"code.cloudfoundry.org/system-metrics/pkg/collector"
@@ -39,6 +41,7 @@ var _ = Describe("SystemMetricsAgent", func() {
 				CACertPath:     testCerts.CA(),
 				CertPath:       testCerts.Cert("system-metrics-agent"),
 				KeyPath:        testCerts.Key("system-metrics-agent"),
+				LimitedMetrics: true,
 			},
 			log.New(GinkgoWriter, "", log.LstdFlags),
 		)
@@ -78,6 +81,89 @@ var _ = Describe("SystemMetricsAgent", func() {
 		resp, err := client.Get("https://" + addr + "/metrics")
 		Expect(err).ToNot(HaveOccurred())
 		Expect(resp.StatusCode).To(Equal(http.StatusOK))
+	})
+
+	It("emits correct metrics", func() {
+		inputFunc := func() (collector.SystemStat, error) {
+			return defaultStat, nil
+		}
+		agent = app.NewSystemMetricsAgent(
+			inputFunc,
+			app.Config{
+				SampleInterval: time.Millisecond,
+				Deployment:     "some-deployment",
+				Job:            "some-job",
+				Index:          "some-index",
+				IP:             "some-ip",
+				CACertPath:     testCerts.CA(),
+				CertPath:       testCerts.Cert("system-metrics-agent"),
+				KeyPath:        testCerts.Key("system-metrics-agent"),
+			},
+			log.New(GinkgoWriter, "", log.LstdFlags),
+		)
+		go agent.Run()
+		defer agent.Shutdown(context.Background())
+
+		var addr string
+		Eventually(func() int {
+			addr = agent.MetricsAddr()
+			return len(addr)
+		}).ShouldNot(Equal(0))
+
+		client := plumbing.NewTLSHTTPClient(
+			testCerts.Cert("system-metrics-agent"),
+			testCerts.Key("system-metrics-agent"),
+			testCerts.CA(),
+			"system-metrics-agent",
+		)
+		resp, err := client.Get("https://" + addr + "/metrics")
+		Expect(err).ToNot(HaveOccurred())
+		Expect(resp.StatusCode).To(Equal(http.StatusOK))
+		body, err := io.ReadAll(resp.Body)
+		Expect(err).To(BeNil())
+		Expect(strings.Count(string(body), "\n")).To(Equal(120))
+	})
+
+	It("limits metrics emitted", func() {
+		inputFunc := func() (collector.SystemStat, error) {
+			return defaultStat, nil
+		}
+		agent = app.NewSystemMetricsAgent(
+			inputFunc,
+			app.Config{
+				SampleInterval: time.Millisecond,
+				Deployment:     "some-deployment",
+				Job:            "some-job",
+				Index:          "some-index",
+				IP:             "some-ip",
+				CACertPath:     testCerts.CA(),
+				CertPath:       testCerts.Cert("system-metrics-agent"),
+				KeyPath:        testCerts.Key("system-metrics-agent"),
+				LimitedMetrics: true,
+			},
+			log.New(GinkgoWriter, "", log.LstdFlags),
+		)
+		go agent.Run()
+		defer agent.Shutdown(context.Background())
+
+		var addr string
+		Eventually(func() int {
+			addr = agent.MetricsAddr()
+			return len(addr)
+		}).ShouldNot(Equal(0))
+
+		client := plumbing.NewTLSHTTPClient(
+			testCerts.Cert("system-metrics-agent"),
+			testCerts.Key("system-metrics-agent"),
+			testCerts.CA(),
+			"system-metrics-agent",
+		)
+		resp, err := client.Get("https://" + addr + "/metrics")
+		Expect(err).ToNot(HaveOccurred())
+		Expect(resp.StatusCode).To(Equal(http.StatusOK))
+		body, err := io.ReadAll(resp.Body)
+		Expect(err).To(BeNil())
+		Expect(strings.Count(string(body), "\n")).To(Equal(45))
 	})
 
 	It("contains default prom labels", func() {
