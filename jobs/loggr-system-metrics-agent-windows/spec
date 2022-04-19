@@ -6,6 +6,7 @@ templates:
   system_metrics_agent_ca.crt.erb: config/certs/system_metrics_agent_ca.crt
   system_metrics_agent.crt.erb: config/certs/system_metrics_agent.crt
   system_metrics_agent.key.erb: config/certs/system_metrics_agent.key
+  prom_scraper_config.yml.erb: config/prom_scraper_config.yml
 
 packages:
 - system-metrics-agent-windows
@@ -29,9 +30,12 @@ properties:
     tls:
       ca_cert:
         description: |
-          TLS loggregator root CA certificate. It is required for key/cert
+          TLS prom scraper CA certificate. It is required for key/cert
           verification.
       cert:
-        description: "TLS certificate for system metrics agent signed by the loggregator CA"
+        description: "TLS certificate for system metrics agent signed by the prom scraper CA"
       key:
-        description: "TLS private key for system metrics agent signed by the loggregator CA"
+        description: "TLS private key for system metrics agent signed by the prom scraper ca"
+      server_name:
+        description: "common name for certificate for metrics"
+        default: system_metrics_agent

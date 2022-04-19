@@ -1,0 +1,6 @@
+port: <%= p("metrics_port") %>
+source_id: "system_metrics_agent"
+instance_id: <%= spec.id || spec.index.to_s %>
+scheme: https
+server_name: <%= p("system_metrics.tls.server_name") %>
+scrape_interval: <%= p("sample_interval") %>

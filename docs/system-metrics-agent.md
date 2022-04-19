@@ -68,7 +68,7 @@ Note: these metrics are also available via HTTP in Prometheus format.
 To deploy system metrics agent, add the following jobs to all instance groups and the variables to the variables section.
 
 **Notes**
-- The system metrics agent is scraped by the metric scraper deployed inside of CF.
+- The system metrics agent is scraped by the prom scraper deployed inside of CF.
 
 ```yaml
 jobs:
@@ -84,8 +84,8 @@ jobs:
 variables:
 - name: system_metrics
   options:
-    ca: /bosh-<ENV_NAME>/cf/loggregator_ca 
-    common_name: system-metrics
+    ca: metric_scraper_ca
+    common_name: system_metrics_agent
     extended_key_usage:
     - client_auth
     - server_auth
