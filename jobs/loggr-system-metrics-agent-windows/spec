@@ -23,6 +23,9 @@ properties:
   use_prom_scraper:
     description: "Use prom scraper to scrape metrics. Set false to use the deprecated bosh-system-metrics-scraper"
     default: false
+  bosh_metrics_forwarder_metrics_only:
+    description: "reduces metrics emitted only to the metrics emitted by the bosh system metrics forwarder"
+    default: false
 
   sample_interval:
     description: |
