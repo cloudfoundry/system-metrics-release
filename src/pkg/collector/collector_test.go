@@ -26,10 +26,19 @@ var _ = Describe("Collector", func() {
 
 	BeforeEach(func() {
 		src = &stubRawCollector{}
+		src.user = 1000
+		src.system = 2000
+		src.idle = 3000
+		src.wait = 4000
 		c = collector.New(
 			log.New(GinkgoWriter, "", log.LstdFlags),
 			collector.WithRawCollector(src),
 		)
+		src.user = 5000 + src.user
+		src.system = 4000 + src.system
+		src.idle = 500 + src.idle
+		src.wait = 500 + src.wait
+
 	})
 
 	It("returns true if the instance is healthy", func() {
@@ -81,10 +90,24 @@ var _ = Describe("Collector", func() {
 		stats, err := c.Collect()
 		Expect(err).ToNot(HaveOccurred())
 
-		Expect(stats.User).To(Equal(10.0))
-		Expect(stats.System).To(Equal(20.0))
-		Expect(stats.Idle).To(Equal(30.0))
-		Expect(stats.Wait).To(Equal(40.0))
+		Expect(stats.User).To(Equal(50.0))
+		Expect(stats.System).To(Equal(40.0))
+		Expect(stats.Idle).To(Equal(5.0))
+		Expect(stats.Wait).To(Equal(5.0))
+
+		src.user = 7000 + src.user
+		src.system = 1000 + src.system
+		src.idle = 1000 + src.idle
+		src.wait = 1000 + src.wait
+
+		stats, err = c.Collect()
+		Expect(err).ToNot(HaveOccurred())
+
+		Expect(stats.User).To(Equal(70.0))
+		Expect(stats.System).To(Equal(10.0))
+		Expect(stats.Idle).To(Equal(10.0))
+		Expect(stats.Wait).To(Equal(10.0))
+
 	})
 
 	It("returns cpu per core metrics", func() {
@@ -360,6 +383,11 @@ type stubRawCollector struct {
 	healthy            bool
 	healthyInvalidJSON bool
 	healthyErr         error
+
+	user   float64
+	system float64
+	idle   float64
+	wait   float64
 }
 
 func (s *stubRawCollector) ProtoCountersWithContext(_ context.Context, protocols []string) ([]net.ProtoCountersStat, error) {
@@ -502,10 +530,10 @@ func (s *stubRawCollector) TimesWithContext(_ context.Context, perCPU bool) ([]c
 
 	return []cpu.TimesStat{
 		{
-			User:   500.0 * s.timesCallCount,
-			System: 1000.0 * s.timesCallCount,
-			Idle:   1500.0 * s.timesCallCount,
-			Iowait: 2000.0 * s.timesCallCount,
+			User:   s.user,
+			System: s.system,
+			Idle:   s.idle,
+			Iowait: s.wait,
 
 			Nice:      1000.0,
 			Irq:       1000.0,
