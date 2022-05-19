@@ -26,7 +26,7 @@ type Config struct {
 
 func LoadConfig() Config {
 	cfg := Config{
-		SampleInterval: time.Minute,
+		SampleInterval: time.Second * 15,
 		MetricPort:     0,
 	}
 
