@@ -1,5 +1,4 @@
 # System Metrics
-===================================================
 
 Components required to collect system metrics from BOSH-deployed vms.
 
