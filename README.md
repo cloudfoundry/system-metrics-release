@@ -1,10 +1,12 @@
 # System Metrics
-[![slack.cloudfoundry.org][slack-badge]][loggregator-slack]
-[![CI Badge][ci-badge]][ci-pipeline]
 ===================================================
 
 Components required to collect system metrics from BOSH-deployed vms.
+
+If you have any questions, or want to get attention for a PR or issue please reach out on the [#logging-and-metrics channel in the cloudfoundry slack](https://cloudfoundry.slack.com/archives/CUW93AF3M)
+
 ![system-metrics-architecture]
+
 
 ### System Metrics Agent
 A standalone agent to provide VM system metrics via a prometheus-scrapable endpoint. A list of metrics
@@ -23,8 +25,3 @@ scraping.
 [system-metrics-scraper]: https://github.com/cloudfoundry/system-metrics-scraper-release
 [system-metrics-agent]: docs/system-metrics-agent.md
 [system-metrics-architecture]: docs/system-metrics-architecture.png
-[slack-badge]:         https://slack.cloudfoundry.org/badge.svg
-[loggregator-slack]:   https://cloudfoundry.slack.com/archives/loggregator
-[ci-badge]:            https://loggregator.ci.cf-app.com/api/v1/pipelines/loggregator/jobs/loggregator-agent-tests/badge
-[ci-pipeline]:         https://loggregator.ci.cf-app.com/teams/main/pipelines/loggregator
-[loggregator-tracker]: https://www.pivotaltracker.com/n/projects/993188
