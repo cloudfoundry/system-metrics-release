@@ -1,9 +1,10 @@
 package testhelper
 
 import (
-	"code.cloudfoundry.org/tlsconfig/certtest"
 	"io/ioutil"
 	"log"
+
+	"code.cloudfoundry.org/tlsconfig/certtest"
 )
 
 type TestCerts struct {

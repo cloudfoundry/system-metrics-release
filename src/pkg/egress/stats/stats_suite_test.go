@@ -34,34 +34,31 @@ var (
 
 		CPUCoreStats: []collector.CPUCoreStat{
 			{
-				CPU:    "cpu1",
+				CPU: "cpu1",
 				CPUStat: collector.CPUStat{
 					User:   25.25,
 					System: 52.52,
 					Idle:   10.10,
 					Wait:   22.22,
 				},
-
 			},
 			{
-				CPU:    "cpu2",
+				CPU: "cpu2",
 				CPUStat: collector.CPUStat{
 					User:   25.25,
 					System: 52.52,
 					Idle:   10.10,
 					Wait:   22.22,
 				},
-
 			},
 			{
-				CPU:    "cpu3",
+				CPU: "cpu3",
 				CPUStat: collector.CPUStat{
 					User:   25.25,
 					System: 52.52,
 					Idle:   10.10,
 					Wait:   22.22,
 				},
-
 			},
 		},
 
