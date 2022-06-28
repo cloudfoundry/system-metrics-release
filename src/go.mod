@@ -13,7 +13,7 @@ require (
 	github.com/prometheus/client_golang v1.7.1
 	github.com/shirou/gopsutil v2.20.5+incompatible
 	golang.org/x/net v0.0.0-20220225172249-27dd8689420f
-	google.golang.org/grpc v1.30.0
+	google.golang.org/grpc v1.47.0
 )
 
 require (
@@ -36,7 +36,7 @@ require (
 	golang.org/x/text v0.3.7 // indirect
 	golang.org/x/tools v0.0.0-20201224043029-2b0845dc783e // indirect
 	google.golang.org/genproto v0.0.0-20200624020401-64a14ca9d1ad // indirect
-	google.golang.org/protobuf v1.26.0 // indirect
+	google.golang.org/protobuf v1.27.1 // indirect
 	gopkg.in/tomb.v1 v1.0.0-20141024135613-dd632973f1e7 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 )
