@@ -122,7 +122,6 @@ github.com/tklauser/numcpus
 github.com/yusufpapurcu/wmi
 # golang.org/x/net v0.0.0-20220225172249-27dd8689420f
 ## explicit; go 1.17
-golang.org/x/net/context
 golang.org/x/net/html
 golang.org/x/net/html/atom
 golang.org/x/net/html/charset
