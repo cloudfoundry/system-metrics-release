@@ -40,7 +40,7 @@ func (r *PromRegistry) Get(name, origin, unit string, tags map[string]string) Ga
 		},
 	)
 
-	r.Registerer.Register(g)
+	_ = r.Registerer.Register(g)
 	r.gauges[gaugeName] = g
 	return g
 }
