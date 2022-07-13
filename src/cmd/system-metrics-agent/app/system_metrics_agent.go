@@ -74,7 +74,10 @@ func (a *SystemMetricsAgent) Shutdown(ctx context.Context) {
 		a.debugLis.Close()
 	}
 
-	a.metricsServer.Shutdown(ctx)
+	err := a.metricsServer.Shutdown(ctx)
+	if err != nil {
+		a.log.Printf("failed to shutdown: %s\n", err)
+	}
 }
 
 func (a *SystemMetricsAgent) startDebugServer() {
@@ -84,10 +87,16 @@ func (a *SystemMetricsAgent) startDebugServer() {
 	var err error
 	a.debugLis, err = net.Listen("tcp", fmt.Sprintf("127.0.0.1:%d", a.cfg.DebugPort))
 	if err != nil {
-		a.log.Panicf("failed to start debug listener: %s", err)
+		a.log.Panicf("failed to start debug listener: %s\n", err)
 	}
 
-	go http.Serve(a.debugLis, nil)
+	go func() {
+		err := http.Serve(a.debugLis, nil)
+		if err != nil {
+			a.log.Printf("failed to serve: %s\n", err)
+		}
+
+	}()
 }
 
 func (a *SystemMetricsAgent) startMetricsServer(addr string) {
