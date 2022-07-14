@@ -9,6 +9,8 @@ builds:
     version: 2.0.15
   35cfa90c-3312-46ad-5a6f-2de3e09a4e57:
     version: 2.0.17
+  389eb40e-7d91-48bb-73d7-0d8a65ace6ab:
+    version: 2.0.18
   511f8e4c-a62f-4900-78d4-fd3c7445a27b:
     version: 2.0.4
   69ffaabd-343b-4c40-66a8-d50ff0d7495c:
