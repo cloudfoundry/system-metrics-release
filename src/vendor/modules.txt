@@ -4,12 +4,9 @@ code.cloudfoundry.org/go-batching
 # code.cloudfoundry.org/go-envstruct v1.5.0
 ## explicit; go 1.12
 code.cloudfoundry.org/go-envstruct
-# code.cloudfoundry.org/go-loggregator v0.0.0-20190813173818-049b6bf8152a
-## explicit; go 1.12
-code.cloudfoundry.org/go-loggregator/rpc/loggregator_v2
-# code.cloudfoundry.org/rfc5424 v0.0.0-20180905210152-236a6d29298a
-## explicit
-code.cloudfoundry.org/rfc5424
+# code.cloudfoundry.org/go-loggregator/v9 v9.0.2
+## explicit; go 1.18
+code.cloudfoundry.org/go-loggregator/v9/rpc/loggregator_v2
 # code.cloudfoundry.org/tlsconfig v0.0.0-20200131000646-bbe0f8da39b3
 ## explicit; go 1.13
 code.cloudfoundry.org/tlsconfig
@@ -125,7 +122,6 @@ github.com/tklauser/numcpus
 github.com/yusufpapurcu/wmi
 # golang.org/x/net v0.0.0-20220225172249-27dd8689420f
 ## explicit; go 1.17
-golang.org/x/net/context
 golang.org/x/net/html
 golang.org/x/net/html/atom
 golang.org/x/net/html/charset
@@ -163,7 +159,7 @@ golang.org/x/text/secure/bidirule
 golang.org/x/text/transform
 golang.org/x/text/unicode/bidi
 golang.org/x/text/unicode/norm
-# golang.org/x/tools v0.0.0-20201224043029-2b0845dc783e
+# golang.org/x/tools v0.0.0-20210106214847-113979e3529a
 ## explicit; go 1.12
 golang.org/x/tools/go/ast/inspector
 # google.golang.org/genproto v0.0.0-20200825200019-8632dd797987
@@ -219,8 +215,8 @@ google.golang.org/grpc/serviceconfig
 google.golang.org/grpc/stats
 google.golang.org/grpc/status
 google.golang.org/grpc/tap
-# google.golang.org/protobuf v1.27.1
-## explicit; go 1.9
+# google.golang.org/protobuf v1.28.0
+## explicit; go 1.11
 google.golang.org/protobuf/encoding/protojson
 google.golang.org/protobuf/encoding/prototext
 google.golang.org/protobuf/encoding/protowire
