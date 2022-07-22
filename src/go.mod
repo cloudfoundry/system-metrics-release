@@ -7,7 +7,7 @@ require (
 	code.cloudfoundry.org/go-envstruct v1.5.0
 	code.cloudfoundry.org/go-loggregator/v9 v9.0.2
 	code.cloudfoundry.org/tlsconfig v0.0.0-20200131000646-bbe0f8da39b3
-	github.com/onsi/ginkgo/v2 v2.1.3
+	github.com/onsi/ginkgo/v2 v2.1.4
 	github.com/onsi/gomega v1.19.0
 	github.com/prometheus/client_golang v1.12.2
 	github.com/shirou/gopsutil/v3 v3.22.5
@@ -35,9 +35,9 @@ require (
 	github.com/tklauser/numcpus v0.4.0 // indirect
 	github.com/yusufpapurcu/wmi v1.2.2 // indirect
 	golang.org/x/net v0.0.0-20220225172249-27dd8689420f // indirect
-	golang.org/x/sys v0.0.0-20220128215802-99c3d69c2c27 // indirect
+	golang.org/x/sys v0.0.0-20220319134239-a9b59b0215f8 // indirect
 	golang.org/x/text v0.3.7 // indirect
-	golang.org/x/tools v0.0.0-20210106214847-113979e3529a // indirect
+	golang.org/x/tools v0.1.10 // indirect
 	google.golang.org/genproto v0.0.0-20200825200019-8632dd797987 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 )
