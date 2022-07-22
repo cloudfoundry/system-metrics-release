@@ -5,18 +5,16 @@ go 1.18
 require (
 	code.cloudfoundry.org/go-batching v0.0.0-20171020220229-924d2a9b48ac
 	code.cloudfoundry.org/go-envstruct v1.5.0
-	code.cloudfoundry.org/go-loggregator v0.0.0-20190813173818-049b6bf8152a // pinned
+	code.cloudfoundry.org/go-loggregator v0.0.0-20190813173818-049b6bf8152a
 	code.cloudfoundry.org/tlsconfig v0.0.0-20200131000646-bbe0f8da39b3
-	github.com/golang/protobuf v1.5.2 // pinned
-	github.com/onsi/ginkgo v1.16.5 // indirect
+	github.com/golang/protobuf v1.5.2
+	github.com/onsi/ginkgo/v2 v2.1.3
 	github.com/onsi/gomega v1.19.0
 	github.com/prometheus/client_golang v1.12.2
 	github.com/shirou/gopsutil/v3 v3.22.5
 	golang.org/x/net v0.0.0-20220225172249-27dd8689420f
 	google.golang.org/grpc v1.48.0
 )
-
-require github.com/onsi/ginkgo/v2 v2.1.3
 
 require (
 	code.cloudfoundry.org/rfc5424 v0.0.0-20180905210152-236a6d29298a // indirect
