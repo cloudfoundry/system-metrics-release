@@ -2,6 +2,7 @@ package app
 
 import (
 	"log"
+	"os"
 	"time"
 
 	envstruct "code.cloudfoundry.org/go-envstruct"
@@ -24,17 +25,20 @@ type Config struct {
 	KeyPath    string `env:"KEY_PATH, required, report"`
 }
 
-func LoadConfig() Config {
+func LoadConfig(warnLogger *log.Logger) (Config, error) {
 	cfg := Config{
 		SampleInterval: time.Second * 15,
 		MetricPort:     0,
 	}
 
 	if err := envstruct.Load(&cfg); err != nil {
-		log.Panicf("failed to load config from environment: %s", err)
+		return cfg, err
 	}
 
-	_ = envstruct.WriteReport(&cfg)
+	envstruct.ReportWriter = os.Stdout
+	if err := envstruct.WriteReport(&cfg); err != nil {
+		warnLogger.Printf("failed to write config to stderr: %s\n", err)
+	}
 
-	return cfg
+	return cfg, nil
 }
