@@ -1,4 +1,4 @@
-package app_test
+package agent_test
 
 import (
 	"log"
@@ -10,6 +10,7 @@ import (
 
 func TestApp(t *testing.T) {
 	log.SetOutput(GinkgoWriter)
+
 	RegisterFailHandler(Fail)
 	RunSpecs(t, "System Metrics Agent App Suite")
 }

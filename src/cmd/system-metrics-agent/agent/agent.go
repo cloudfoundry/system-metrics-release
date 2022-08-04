@@ -1,4 +1,4 @@
-package app
+package agent
 
 import (
 	"context"
@@ -19,7 +19,7 @@ import (
 
 const statOrigin = "system_metrics_agent"
 
-type SystemMetricsAgent struct {
+type Agent struct {
 	cfg           Config
 	log           *log.Logger
 	debugLis      net.Listener
@@ -29,22 +29,22 @@ type SystemMetricsAgent struct {
 	inputFunc     collector.InputFunc
 }
 
-func NewSystemMetricsAgent(i collector.InputFunc, cfg Config, log *log.Logger) *SystemMetricsAgent {
-	return &SystemMetricsAgent{
+func New(i collector.InputFunc, cfg Config, log *log.Logger) *Agent {
+	return &Agent{
 		cfg:       cfg,
 		log:       log,
 		inputFunc: i,
 	}
 }
 
-func (a *SystemMetricsAgent) Run() {
+func (a *Agent) Run() {
 	a.startDebugServer()
 
 	metricsURL := fmt.Sprintf(":%d", a.cfg.MetricPort)
 	a.startMetricsServer(metricsURL)
 }
 
-func (a *SystemMetricsAgent) MetricsAddr() string {
+func (a *Agent) MetricsAddr() string {
 	a.mu.Lock()
 	defer a.mu.Unlock()
 
@@ -55,7 +55,7 @@ func (a *SystemMetricsAgent) MetricsAddr() string {
 	return a.metricsLis.Addr().String()
 }
 
-func (a *SystemMetricsAgent) DebugAddr() string {
+func (a *Agent) DebugAddr() string {
 	a.mu.Lock()
 	defer a.mu.Unlock()
 
@@ -66,7 +66,7 @@ func (a *SystemMetricsAgent) DebugAddr() string {
 	return a.debugLis.Addr().String()
 }
 
-func (a *SystemMetricsAgent) Shutdown(ctx context.Context) {
+func (a *Agent) Shutdown(ctx context.Context) {
 	a.mu.Lock()
 	defer a.mu.Unlock()
 
@@ -80,7 +80,7 @@ func (a *SystemMetricsAgent) Shutdown(ctx context.Context) {
 	}
 }
 
-func (a *SystemMetricsAgent) startDebugServer() {
+func (a *Agent) startDebugServer() {
 	a.mu.Lock()
 	defer a.mu.Unlock()
 
@@ -99,7 +99,7 @@ func (a *SystemMetricsAgent) startDebugServer() {
 	}()
 }
 
-func (a *SystemMetricsAgent) startMetricsServer(addr string) {
+func (a *Agent) startMetricsServer(addr string) {
 	labels := map[string]string{
 		"source_id":  statOrigin,
 		"deployment": a.cfg.Deployment,
@@ -127,7 +127,7 @@ func (a *SystemMetricsAgent) startMetricsServer(addr string) {
 	log.Printf("Metrics server closing: %s", a.metricsServer.ServeTLS(a.metricsLis, "", ""))
 }
 
-func (a *SystemMetricsAgent) setup(addr string, router *http.ServeMux) {
+func (a *Agent) setup(addr string, router *http.ServeMux) {
 	a.mu.Lock()
 	defer a.mu.Unlock()
 

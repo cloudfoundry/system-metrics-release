@@ -1,4 +1,4 @@
-package app_test
+package agent_test
 
 import (
 	"context"
@@ -11,7 +11,7 @@ import (
 
 	"code.cloudfoundry.org/system-metrics/pkg/collector"
 
-	"code.cloudfoundry.org/system-metrics/cmd/system-metrics-agent/app"
+	"code.cloudfoundry.org/system-metrics/cmd/system-metrics-agent/agent"
 	"code.cloudfoundry.org/system-metrics/internal/testhelper"
 	"code.cloudfoundry.org/system-metrics/pkg/plumbing"
 
@@ -21,7 +21,7 @@ import (
 
 var _ = Describe("SystemMetricsAgent", func() {
 	var (
-		agent     *app.SystemMetricsAgent
+		app       *agent.Agent
 		testCerts = testhelper.GenerateCerts("systemMetricsCA")
 	)
 
@@ -30,9 +30,9 @@ var _ = Describe("SystemMetricsAgent", func() {
 			return defaultStat, nil
 		}
 
-		agent = app.NewSystemMetricsAgent(
+		app = agent.New(
 			inputFunc,
-			app.Config{
+			agent.Config{
 				SampleInterval: time.Millisecond,
 				Deployment:     "some-deployment",
 				Job:            "some-job",
@@ -48,12 +48,12 @@ var _ = Describe("SystemMetricsAgent", func() {
 	})
 
 	It("has an http listener for PProf", func() {
-		go agent.Run()
-		defer agent.Shutdown(context.Background())
+		go app.Run()
+		defer app.Shutdown(context.Background())
 
 		var addr string
 		Eventually(func() int {
-			addr = agent.DebugAddr()
+			addr = app.DebugAddr()
 			return len(addr)
 		}).ShouldNot(Equal(0))
 
@@ -63,12 +63,12 @@ var _ = Describe("SystemMetricsAgent", func() {
 	})
 
 	It("has a prom exposition endpoint", func() {
-		go agent.Run()
-		defer agent.Shutdown(context.Background())
+		go app.Run()
+		defer app.Shutdown(context.Background())
 
 		var addr string
 		Eventually(func() int {
-			addr = agent.MetricsAddr()
+			addr = app.MetricsAddr()
 			return len(addr)
 		}).ShouldNot(Equal(0))
 
@@ -87,9 +87,9 @@ var _ = Describe("SystemMetricsAgent", func() {
 		inputFunc := func() (collector.SystemStat, error) {
 			return defaultStat, nil
 		}
-		agent = app.NewSystemMetricsAgent(
+		app = agent.New(
 			inputFunc,
-			app.Config{
+			agent.Config{
 				SampleInterval: time.Millisecond,
 				Deployment:     "some-deployment",
 				Job:            "some-job",
@@ -101,12 +101,12 @@ var _ = Describe("SystemMetricsAgent", func() {
 			},
 			log.New(GinkgoWriter, "", log.LstdFlags),
 		)
-		go agent.Run()
-		defer agent.Shutdown(context.Background())
+		go app.Run()
+		defer app.Shutdown(context.Background())
 
 		var addr string
 		Eventually(func() int {
-			addr = agent.MetricsAddr()
+			addr = app.MetricsAddr()
 			return len(addr)
 		}).ShouldNot(Equal(0))
 
@@ -128,9 +128,9 @@ var _ = Describe("SystemMetricsAgent", func() {
 		inputFunc := func() (collector.SystemStat, error) {
 			return defaultStat, nil
 		}
-		agent = app.NewSystemMetricsAgent(
+		app = agent.New(
 			inputFunc,
-			app.Config{
+			agent.Config{
 				SampleInterval: time.Millisecond,
 				Deployment:     "some-deployment",
 				Job:            "some-job",
@@ -143,12 +143,12 @@ var _ = Describe("SystemMetricsAgent", func() {
 			},
 			log.New(GinkgoWriter, "", log.LstdFlags),
 		)
-		go agent.Run()
-		defer agent.Shutdown(context.Background())
+		go app.Run()
+		defer app.Shutdown(context.Background())
 
 		var addr string
 		Eventually(func() int {
-			addr = agent.MetricsAddr()
+			addr = app.MetricsAddr()
 			return len(addr)
 		}).ShouldNot(Equal(0))
 
@@ -167,12 +167,12 @@ var _ = Describe("SystemMetricsAgent", func() {
 	})
 
 	It("contains default prom labels", func() {
-		go agent.Run()
-		defer agent.Shutdown(context.Background())
+		go app.Run()
+		defer app.Shutdown(context.Background())
 
 		var addr string
 		Eventually(func() int {
-			addr = agent.MetricsAddr()
+			addr = app.MetricsAddr()
 			return len(addr)
 		}).ShouldNot(Equal(0))
 
