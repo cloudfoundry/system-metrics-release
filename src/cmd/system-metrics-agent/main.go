@@ -6,6 +6,7 @@ import (
 
 	"code.cloudfoundry.org/system-metrics/cmd/system-metrics-agent/app"
 	"code.cloudfoundry.org/system-metrics/pkg/collector"
+	"code.cloudfoundry.org/system-metrics/pkg/debugserver"
 )
 
 var (
@@ -26,6 +27,13 @@ func main() {
 	if err != nil {
 		errLogger.Fatalf("failed to load config from environment: %s\n", err)
 	}
+
+	go func() {
+		err := debugserver.New(cfg.DebugPort).Start()
+		if err != nil {
+			errLogger.Println(err)
+		}
+	}()
 
 	c := collector.New(errLogger)
 	app.NewSystemMetricsAgent(c.Collect, cfg, errLogger).Run()

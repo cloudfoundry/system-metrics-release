@@ -47,21 +47,6 @@ var _ = Describe("SystemMetricsAgent", func() {
 		)
 	})
 
-	It("has an http listener for PProf", func() {
-		go agent.Run()
-		defer agent.Shutdown(context.Background())
-
-		var addr string
-		Eventually(func() int {
-			addr = agent.DebugAddr()
-			return len(addr)
-		}).ShouldNot(Equal(0))
-
-		resp, err := http.Get("http://" + addr + "/debug/pprof/")
-		Expect(err).ToNot(HaveOccurred())
-		Expect(resp.StatusCode).To(Equal(http.StatusOK))
-	})
-
 	It("has a prom exposition endpoint", func() {
 		go agent.Run()
 		defer agent.Shutdown(context.Background())
