@@ -6,7 +6,6 @@ import (
 	"log"
 	"net"
 	"net/http"
-	_ "net/http/pprof"
 	"sync"
 	"time"
 
@@ -22,7 +21,6 @@ const statOrigin = "system_metrics_agent"
 type Agent struct {
 	cfg           Config
 	log           *log.Logger
-	debugLis      net.Listener
 	metricsLis    net.Listener
 	metricsServer http.Server
 	mu            sync.Mutex
@@ -38,8 +36,6 @@ func New(i collector.InputFunc, cfg Config, log *log.Logger) *Agent {
 }
 
 func (a *Agent) Run() {
-	a.startDebugServer()
-
 	metricsURL := fmt.Sprintf(":%d", a.cfg.MetricPort)
 	a.startMetricsServer(metricsURL)
 }
@@ -55,48 +51,14 @@ func (a *Agent) MetricsAddr() string {
 	return a.metricsLis.Addr().String()
 }
 
-func (a *Agent) DebugAddr() string {
-	a.mu.Lock()
-	defer a.mu.Unlock()
-
-	if a.debugLis == nil {
-		return ""
-	}
-
-	return a.debugLis.Addr().String()
-}
-
 func (a *Agent) Shutdown(ctx context.Context) {
 	a.mu.Lock()
 	defer a.mu.Unlock()
-
-	if a.debugLis != nil {
-		a.debugLis.Close()
-	}
 
 	err := a.metricsServer.Shutdown(ctx)
 	if err != nil {
 		a.log.Printf("failed to shutdown: %s\n", err)
 	}
-}
-
-func (a *Agent) startDebugServer() {
-	a.mu.Lock()
-	defer a.mu.Unlock()
-
-	var err error
-	a.debugLis, err = net.Listen("tcp", fmt.Sprintf("127.0.0.1:%d", a.cfg.DebugPort))
-	if err != nil {
-		a.log.Panicf("failed to start debug listener: %s\n", err)
-	}
-
-	go func() {
-		err := http.Serve(a.debugLis, nil)
-		if err != nil {
-			a.log.Printf("failed to serve: %s\n", err)
-		}
-
-	}()
 }
 
 func (a *Agent) startMetricsServer(addr string) {

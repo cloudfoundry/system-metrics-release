@@ -8,6 +8,7 @@ import (
 	"code.cloudfoundry.org/go-envstruct"
 	"code.cloudfoundry.org/system-metrics/cmd/system-metrics-agent/agent"
 	"code.cloudfoundry.org/system-metrics/pkg/collector"
+	"code.cloudfoundry.org/system-metrics/pkg/debugserver"
 )
 
 var (
@@ -51,6 +52,13 @@ func main() {
 	if err := envstruct.WriteReport(&cfg); err != nil {
 		errLogger.Printf("failed to write config to stderr: %s\n", err)
 	}
+
+	go func() {
+		err := debugserver.New(cfg.DebugPort).Start()
+		if err != nil {
+			errLogger.Println(err)
+		}
+	}()
 
 	c := collector.New(errLogger)
 	agent.New(c.Collect, agent.Config(cfg), errLogger).Run()
