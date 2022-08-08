@@ -5,10 +5,14 @@ import (
 	"os"
 	"time"
 
-	"code.cloudfoundry.org/go-envstruct"
-	"code.cloudfoundry.org/system-metrics/cmd/system-metrics-agent/agent"
 	"code.cloudfoundry.org/system-metrics/pkg/collector"
 	"code.cloudfoundry.org/system-metrics/pkg/debugserver"
+	"code.cloudfoundry.org/system-metrics/pkg/egress/stats"
+	"code.cloudfoundry.org/system-metrics/pkg/metricserver"
+
+	"code.cloudfoundry.org/go-envstruct"
+	"code.cloudfoundry.org/tlsconfig"
+	"github.com/prometheus/client_golang/prometheus"
 )
 
 var (
@@ -61,5 +65,28 @@ func main() {
 	}()
 
 	c := collector.New(errLogger)
-	agent.New(c.Collect, agent.Config(cfg), errLogger).Run()
+	reg := prometheus.NewRegistry()
+	sender := stats.NewPromSender(stats.NewPromRegistry(reg), "", cfg.LimitedMetrics, labels("", &cfg))
+	go collector.NewProcessor(c.Collect, []collector.StatsSender{sender}, cfg.SampleInterval, errLogger).Run()
+
+	tlsCfg, err := tlsconfig.Build(
+		tlsconfig.WithInternalServiceDefaults(),
+		tlsconfig.WithIdentityFromFile(cfg.CertPath, cfg.KeyPath),
+	).Server(
+		tlsconfig.WithClientAuthenticationFromFile(cfg.CACertPath),
+	)
+	if err != nil {
+		errLogger.Fatalf("failed to build tls config: %s\n", err)
+	}
+	errLogger.Fatalf("metric server error: %s\n", metricserver.New(cfg.MetricPort, tlsCfg, reg).Run())
+}
+
+func labels(sourceID string, cfg *config) map[string]string {
+	return map[string]string{
+		"source_id":  sourceID,
+		"deployment": cfg.Deployment,
+		"job":        cfg.Job,
+		"index":      cfg.Index,
+		"ip":         cfg.IP,
+	}
 }

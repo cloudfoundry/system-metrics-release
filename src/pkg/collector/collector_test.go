@@ -653,7 +653,7 @@ func (s *stubRawCollector) DiskIOCountersWithContext(_ context.Context, names ..
 	switch names[0] {
 	case "/dev/sda1": // system disk
 		return map[string]disk.IOCountersStat{
-			"sda1": disk.IOCountersStat{
+			"sda1": {
 				ReadBytes:  100,
 				WriteBytes: 200,
 				ReadTime:   300,
@@ -663,7 +663,7 @@ func (s *stubRawCollector) DiskIOCountersWithContext(_ context.Context, names ..
 		}, nil
 	case "/dev/sdb1": // system disk
 		return map[string]disk.IOCountersStat{
-			"sdb1": disk.IOCountersStat{
+			"sdb1": {
 				ReadBytes:  1000,
 				WriteBytes: 2000,
 				ReadTime:   3000,
@@ -673,7 +673,7 @@ func (s *stubRawCollector) DiskIOCountersWithContext(_ context.Context, names ..
 		}, nil
 	case "/dev/sdb2": // system disk
 		return map[string]disk.IOCountersStat{
-			"sdb2": disk.IOCountersStat{
+			"sdb2": {
 				ReadBytes:  10000,
 				WriteBytes: 20000,
 				ReadTime:   30000,
