@@ -143,11 +143,12 @@ func (a *SystemMetricsAgent) setup(addr string, router *http.ServeMux) {
 	}
 
 	a.metricsServer = http.Server{
-		Addr:         addr,
-		ReadTimeout:  5 * time.Second,
-		WriteTimeout: 5 * time.Second,
-		Handler:      router,
-		TLSConfig:    tlsConfig,
+		Addr:              addr,
+		ReadTimeout:       5 * time.Second,
+		ReadHeaderTimeout: 5 * time.Second,
+		WriteTimeout:      5 * time.Second,
+		Handler:           router,
+		TLSConfig:         tlsConfig,
 	}
 
 	a.metricsLis, err = net.Listen("tcp", addr)
