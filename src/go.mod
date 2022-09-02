@@ -8,7 +8,7 @@ require (
 	code.cloudfoundry.org/go-loggregator/v9 v9.0.2
 	code.cloudfoundry.org/tlsconfig v0.0.0-20200131000646-bbe0f8da39b3
 	github.com/onsi/ginkgo/v2 v2.1.6
-	github.com/onsi/gomega v1.20.1
+	github.com/onsi/gomega v1.20.2
 	github.com/prometheus/client_golang v1.13.0
 	github.com/shirou/gopsutil/v3 v3.22.5
 	google.golang.org/grpc v1.49.0
