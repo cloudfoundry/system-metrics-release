@@ -10,17 +10,23 @@ on:
 
 jobs:
   test:
-    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-go@v3
         with:
           go-version: 1.18
-      - run: go run github.com/onsi/ginkgo/v2/ginkgo -r --race --randomize-all --randomize-suites
+      - run: go run github.com/onsi/ginkgo/v2/ginkgo -r --procs=3 --compilers=3 --randomize-all --randomize-suites --keep-going --race --trace
         working-directory: src
 
   vet:
-    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-go@v3
@@ -30,7 +36,10 @@ jobs:
         working-directory: src
 
   lint:
-    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-go@v2
@@ -39,3 +48,4 @@ jobs:
       - uses: golangci/golangci-lint-action@v3.2.0
         with:
           working-directory: src
+          args: --timeout 5m
