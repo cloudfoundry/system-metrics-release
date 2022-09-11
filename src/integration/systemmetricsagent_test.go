@@ -210,7 +210,7 @@ var _ = Describe("System Metrics Agent", func() {
 			for _, m := range metrics {
 				g.Expect(body).To(ContainSubstring(m))
 			}
-		}, 1*time.Minute, 1*time.Second).Should(Succeed())
+		}, 90*time.Second, 1*time.Second).Should(Succeed())
 	})
 
 	It("uses correct labels", func() {
@@ -230,6 +230,6 @@ var _ = Describe("System Metrics Agent", func() {
 			g.Expect(body).To(ContainSubstring(testJob))
 			g.Expect(body).To(ContainSubstring(testIndex))
 			g.Expect(body).To(ContainSubstring(testIp))
-		}, 1*time.Minute, 1*time.Second).Should(Succeed())
+		}, 90*time.Second, 1*time.Second).Should(Succeed())
 	})
 })
