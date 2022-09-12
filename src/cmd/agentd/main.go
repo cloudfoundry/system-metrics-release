@@ -71,5 +71,5 @@ func main() {
 		errLogger,
 	).Run()
 
-	srv.Run()
+	errLogger.Println(srv.Run())
 }
