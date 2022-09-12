@@ -17,7 +17,7 @@ func TestIntegration(t *testing.T) {
 
 var _ = SynchronizedBeforeSuite(func() []byte {
 	// runs on first process
-	path, err := gexec.Build("../cmd/system-metrics-agent")
+	path, err := gexec.Build("../cmd/agentd")
 	Expect(err).NotTo(HaveOccurred())
 	DeferCleanup(gexec.CleanupBuildArtifacts)
 
