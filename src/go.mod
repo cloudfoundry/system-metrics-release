@@ -1,6 +1,6 @@
 module code.cloudfoundry.org/system-metrics
 
-go 1.18
+go 1.19
 
 require (
 	code.cloudfoundry.org/go-batching v0.0.0-20171020220229-924d2a9b48ac
