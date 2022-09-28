@@ -3,7 +3,6 @@ package collector
 import (
 	"context"
 	"encoding/json"
-	"io/ioutil"
 	"log"
 	"os"
 	"path/filepath"
@@ -416,5 +415,5 @@ func (s defaultRawCollector) PartitionsWithContext(ctx context.Context, all bool
 }
 
 func (s defaultRawCollector) InstanceHealth() ([]byte, error) {
-	return ioutil.ReadFile(instanceHealthPath)
+	return os.ReadFile(instanceHealthPath)
 }

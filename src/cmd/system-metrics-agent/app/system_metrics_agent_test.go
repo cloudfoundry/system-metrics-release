@@ -3,7 +3,6 @@ package app_test
 import (
 	"context"
 	"io"
-	"io/ioutil"
 	"log"
 	"net/http"
 	"strings"
@@ -192,7 +191,7 @@ func hasDefaultLabels(addr string, testCerts *testhelper.TestCerts) func() bool 
 		Expect(err).ToNot(HaveOccurred())
 		Expect(resp.StatusCode).To(Equal(http.StatusOK))
 
-		body, err := ioutil.ReadAll(resp.Body)
+		body, err := io.ReadAll(resp.Body)
 		Expect(err).ToNot(HaveOccurred())
 
 		if len(body) > 0 {
