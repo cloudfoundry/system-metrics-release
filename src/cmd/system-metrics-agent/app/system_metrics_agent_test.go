@@ -12,7 +12,6 @@ import (
 
 	"code.cloudfoundry.org/system-metrics/cmd/system-metrics-agent/app"
 	"code.cloudfoundry.org/system-metrics/internal/testhelper"
-	"code.cloudfoundry.org/system-metrics/pkg/plumbing"
 
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
@@ -71,7 +70,7 @@ var _ = Describe("SystemMetricsAgent", func() {
 			return len(addr)
 		}).ShouldNot(Equal(0))
 
-		client := plumbing.NewTLSHTTPClient(
+		client := newTLSClient(
 			testCerts.Cert("system-metrics-agent"),
 			testCerts.Key("system-metrics-agent"),
 			testCerts.CA(),
@@ -109,7 +108,7 @@ var _ = Describe("SystemMetricsAgent", func() {
 			return len(addr)
 		}).ShouldNot(Equal(0))
 
-		client := plumbing.NewTLSHTTPClient(
+		client := newTLSClient(
 			testCerts.Cert("system-metrics-agent"),
 			testCerts.Key("system-metrics-agent"),
 			testCerts.CA(),
@@ -151,7 +150,7 @@ var _ = Describe("SystemMetricsAgent", func() {
 			return len(addr)
 		}).ShouldNot(Equal(0))
 
-		client := plumbing.NewTLSHTTPClient(
+		client := newTLSClient(
 			testCerts.Cert("system-metrics-agent"),
 			testCerts.Key("system-metrics-agent"),
 			testCerts.CA(),
@@ -181,7 +180,7 @@ var _ = Describe("SystemMetricsAgent", func() {
 
 func hasDefaultLabels(addr string, testCerts *testhelper.TestCerts) func() bool {
 	return func() bool {
-		client := plumbing.NewTLSHTTPClient(
+		client := newTLSClient(
 			testCerts.Cert("system-metrics-agent"),
 			testCerts.Key("system-metrics-agent"),
 			testCerts.CA(),
