@@ -1,6 +1,7 @@
 package internal
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"reflect"
@@ -26,16 +27,18 @@ type AsyncAssertion struct {
 
 	timeoutInterval time.Duration
 	pollingInterval time.Duration
+	ctx             context.Context
 	offset          int
 	g               *Gomega
 }
 
-func NewAsyncAssertion(asyncType AsyncAssertionType, actualInput interface{}, g *Gomega, timeoutInterval time.Duration, pollingInterval time.Duration, offset int) *AsyncAssertion {
+func NewAsyncAssertion(asyncType AsyncAssertionType, actualInput interface{}, g *Gomega, timeoutInterval time.Duration, pollingInterval time.Duration, ctx context.Context, offset int) *AsyncAssertion {
 	out := &AsyncAssertion{
 		asyncType:       asyncType,
 		timeoutInterval: timeoutInterval,
 		pollingInterval: pollingInterval,
 		offset:          offset,
+		ctx:             ctx,
 		g:               g,
 	}
 
@@ -99,6 +102,21 @@ func (assertion *AsyncAssertion) WithTimeout(interval time.Duration) types.Async
 
 func (assertion *AsyncAssertion) WithPolling(interval time.Duration) types.AsyncAssertion {
 	assertion.pollingInterval = interval
+	return assertion
+}
+
+func (assertion *AsyncAssertion) Within(timeout time.Duration) types.AsyncAssertion {
+	assertion.timeoutInterval = timeout
+	return assertion
+}
+
+func (assertion *AsyncAssertion) ProbeEvery(interval time.Duration) types.AsyncAssertion {
+	assertion.pollingInterval = interval
+	return assertion
+}
+
+func (assertion *AsyncAssertion) WithContext(ctx context.Context) types.AsyncAssertion {
+	assertion.ctx = ctx
 	return assertion
 }
 
@@ -186,6 +204,11 @@ func (assertion *AsyncAssertion) match(matcher types.GomegaMatcher, desiredMatch
 		assertion.g.Fail(fmt.Sprintf("%s after %.3fs.\n%s%s%s", preamble, time.Since(timer).Seconds(), description, message, errMsg), 3+assertion.offset)
 	}
 
+	var contextDone <-chan struct{}
+	if assertion.ctx != nil {
+		contextDone = assertion.ctx.Done()
+	}
+
 	if assertion.asyncType == AsyncAssertionTypeEventually {
 		for {
 			if err == nil && matches == desiredMatch {
@@ -204,6 +227,9 @@ func (assertion *AsyncAssertion) match(matcher types.GomegaMatcher, desiredMatch
 					mayChange = assertion.matcherMayChange(matcher, value)
 					matches, err = matcher.Match(value)
 				}
+			case <-contextDone:
+				fail("Context was cancelled")
+				return false
 			case <-timeout:
 				fail("Timed out")
 				return false
@@ -227,6 +253,9 @@ func (assertion *AsyncAssertion) match(matcher types.GomegaMatcher, desiredMatch
 					mayChange = assertion.matcherMayChange(matcher, value)
 					matches, err = matcher.Match(value)
 				}
+			case <-contextDone:
+				fail("Context was cancelled")
+				return false
 			case <-timeout:
 				return true
 			}
