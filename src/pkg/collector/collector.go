@@ -205,8 +205,8 @@ func (c *Collector) Collect() (SystemStat, error) {
 		CPUStat:      cpu,
 		CPUCoreStats: coreStats,
 
-		MemKB:      m.Used / 1024,
-		MemPercent: m.UsedPercent,
+		MemKB:      (m.Total - m.Available) / 1024,
+		MemPercent: float64(m.Total-m.Available) / float64(m.Total),
 
 		SwapKB:      s.Used / 1024,
 		SwapPercent: s.UsedPercent,

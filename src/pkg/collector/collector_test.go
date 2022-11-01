@@ -65,8 +65,8 @@ var _ = Describe("Collector", func() {
 		stats, err := c.Collect()
 		Expect(err).ToNot(HaveOccurred())
 
-		Expect(stats.MemKB).To(Equal(uint64(2)))
-		Expect(stats.MemPercent).To(Equal(40.23))
+		Expect(stats.MemKB).To(Equal(uint64(1)))
+		Expect(stats.MemPercent).To(Equal(0.5))
 	})
 
 	It("returns the swap metrics", func() {
@@ -432,8 +432,8 @@ func (s *stubRawCollector) VirtualMemoryWithContext(context.Context) (*mem.Virtu
 	}
 
 	return &mem.VirtualMemoryStat{
-		Used:        2048,
-		UsedPercent: 40.23,
+		Total:     2048,
+		Available: 1024,
 	}, nil
 }
 
