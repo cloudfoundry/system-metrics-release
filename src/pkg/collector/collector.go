@@ -353,7 +353,7 @@ func (c Collector) protoCountersStat(ctx context.Context) (ProtoCountersStat, er
 }
 
 func calculateCPUStat(previous, current cpu.TimesStat) CPUStat {
-	totalDiff := current.Total() - previous.Total()
+	totalDiff := total(current) - total(previous)
 
 	return CPUStat{
 		User:   (current.User - previous.User) / totalDiff * 100.0,
@@ -361,6 +361,11 @@ func calculateCPUStat(previous, current cpu.TimesStat) CPUStat {
 		Idle:   (current.Idle - previous.Idle) / totalDiff * 100.0,
 		Wait:   (current.Iowait - previous.Iowait) / totalDiff * 100.0,
 	}
+}
+
+func total(c cpu.TimesStat) float64 {
+	return c.User + c.System + c.Idle + c.Nice + c.Iowait + c.Irq +
+		c.Softirq + c.Steal + c.Guest + c.GuestNice
 }
 
 type RawCollector interface {
