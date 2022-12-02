@@ -101,7 +101,7 @@ github.com/prometheus/common/model
 github.com/prometheus/procfs
 github.com/prometheus/procfs/internal/fs
 github.com/prometheus/procfs/internal/util
-# github.com/shirou/gopsutil/v3 v3.22.10
+# github.com/shirou/gopsutil/v3 v3.22.11
 ## explicit; go 1.15
 github.com/shirou/gopsutil/v3/cpu
 github.com/shirou/gopsutil/v3/disk
@@ -112,11 +112,11 @@ github.com/shirou/gopsutil/v3/net
 # github.com/square/certstrap v1.2.0
 ## explicit
 github.com/square/certstrap/pkix
-# github.com/tklauser/go-sysconf v0.3.10
+# github.com/tklauser/go-sysconf v0.3.11
 ## explicit; go 1.13
 github.com/tklauser/go-sysconf
-# github.com/tklauser/numcpus v0.4.0
-## explicit; go 1.11
+# github.com/tklauser/numcpus v0.6.0
+## explicit; go 1.13
 github.com/tklauser/numcpus
 # github.com/yusufpapurcu/wmi v1.2.2
 ## explicit; go 1.16
