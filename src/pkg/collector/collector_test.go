@@ -66,7 +66,7 @@ var _ = Describe("Collector", func() {
 		Expect(err).ToNot(HaveOccurred())
 
 		Expect(stats.MemKB).To(Equal(uint64(1)))
-		Expect(stats.MemPercent).To(Equal(0.5))
+		Expect(stats.MemPercent).To(Equal(50.0))
 	})
 
 	It("returns the swap metrics", func() {
