@@ -206,7 +206,7 @@ func (c *Collector) Collect() (SystemStat, error) {
 		CPUCoreStats: coreStats,
 
 		MemKB:      (m.Total - m.Available) / 1024,
-		MemPercent: float64(m.Total-m.Available) / float64(m.Total),
+		MemPercent: float64(m.Total-m.Available) / float64(m.Total) * 100,
 
 		SwapKB:      s.Used / 1024,
 		SwapPercent: s.UsedPercent,
