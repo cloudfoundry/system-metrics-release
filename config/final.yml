@@ -1,7 +1,6 @@
 name: system-metrics
 blobstore:
-  provider: s3
+  provider: gcs
   options:
     bucket_name: system-metrics-release-blobs
-    region: us-west-2
 
