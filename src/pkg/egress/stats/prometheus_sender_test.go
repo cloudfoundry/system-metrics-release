@@ -30,7 +30,7 @@ var _ = Describe("Prometheus Sender", func() {
 	It("gets the correct number of metrics from the registry", func() {
 		sender.Send(defaultInput)
 
-		Expect(registry.gaugeCount).To(Equal(52))
+		Expect(registry.gaugeCount).To(Equal(50))
 	})
 
 	It("does not panic with no default labels", func() {
@@ -81,6 +81,8 @@ var _ = Describe("Prometheus Sender", func() {
 		Entry("system_cpu_sys", "system_cpu_sys", map[string]string{"origin": "test-origin"}, "Percent", 52.52),
 		Entry("system_cpu_idle", "system_cpu_idle", map[string]string{"origin": "test-origin"}, "Percent", 10.10),
 		Entry("system_cpu_wait", "system_cpu_wait", map[string]string{"origin": "test-origin"}, "Percent", 22.22),
+		Entry("system_cpu_physical_core_count", "system_cpu_physical_core_count", map[string]string{"origin": "test-origin"}, "Cores", 1.0),
+		Entry("system_cpu_threads_per_core", "system_cpu_threads_per_core", map[string]string{"origin": "test-origin"}, "Threads", 2.0),
 		Entry("system cpu core 1 user", "system_cpu_core_user", map[string]string{"origin": "test-origin", "cpu_name": "cpu1"}, "Percent", 25.25),
 		Entry("system cpu core 1 sys", "system_cpu_core_sys", map[string]string{"origin": "test-origin", "cpu_name": "cpu1"}, "Percent", 52.52),
 		Entry("system cpu core 1 idle", "system_cpu_core_idle", map[string]string{"origin": "test-origin", "cpu_name": "cpu1"}, "Percent", 10.10),

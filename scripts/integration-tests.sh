@@ -15,7 +15,9 @@ system_cpu_core_sys
 system_cpu_core_user
 system_cpu_core_wait
 system_cpu_idle
+system_cpu_physical_core_count
 system_cpu_sys
+system_cpu_threads_per_core
 system_cpu_user
 system_cpu_wait
 system_disk_ephemeral_inode_percent

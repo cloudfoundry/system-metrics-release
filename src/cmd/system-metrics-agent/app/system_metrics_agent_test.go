@@ -119,7 +119,7 @@ var _ = Describe("SystemMetricsAgent", func() {
 		Expect(resp.StatusCode).To(Equal(http.StatusOK))
 		body, err := io.ReadAll(resp.Body)
 		Expect(err).To(BeNil())
-		Expect(strings.Count(string(body), "\n")).To(Equal(120))
+		Expect(strings.Count(string(body), "\n")).To(Equal(126))
 	})
 
 	It("limits metrics emitted", func() {
@@ -161,7 +161,7 @@ var _ = Describe("SystemMetricsAgent", func() {
 		Expect(resp.StatusCode).To(Equal(http.StatusOK))
 		body, err := io.ReadAll(resp.Body)
 		Expect(err).To(BeNil())
-		Expect(strings.Count(string(body), "\n")).To(Equal(45))
+		Expect(strings.Count(string(body), "\n")).To(Equal(51))
 	})
 
 	It("contains default prom labels", func() {

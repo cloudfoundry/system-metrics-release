@@ -65,6 +65,12 @@ func (p PromSender) setSystemStats(stats collector.SystemStat) {
 		gauge.Set(float64(stats.CPUStat.Idle))
 	}
 
+	gauge = p.registry.Get("system_cpu_physical_core_count", p.origin, "Cores", labels)
+	gauge.Set(float64(stats.CPUPhysicalCoreCount))
+
+	gauge = p.registry.Get("system_cpu_threads_per_core", p.origin, "Threads", labels)
+	gauge.Set(float64(stats.CPUThreadsPerCore))
+
 	gauge = p.registry.Get("system_cpu_user", p.origin, "Percent", labels)
 	gauge.Set(float64(stats.CPUStat.User))
 
