@@ -30,6 +30,7 @@ var _ = Describe("Collector", func() {
 		src.system = 2000
 		src.idle = 3000
 		src.wait = 4000
+		src.physicalCores = 2
 		c = collector.New(
 			log.New(GinkgoWriter, "", log.LstdFlags),
 			collector.WithRawCollector(src),
@@ -108,6 +109,14 @@ var _ = Describe("Collector", func() {
 		Expect(stats.Idle).To(Equal(10.0))
 		Expect(stats.Wait).To(Equal(10.0))
 
+	})
+
+	It("returns number of physical cores", func() {
+		stats, err := c.Collect()
+		Expect(err).ToNot(HaveOccurred())
+
+		Expect(stats.CPUPhysicalCoreCount).To(Equal(2))
+		Expect(stats.CPUThreadsPerCore).To(Equal(2))
 	})
 
 	It("returns cpu per core metrics", func() {
@@ -318,6 +327,13 @@ var _ = Describe("Collector", func() {
 		Expect(err).To(HaveOccurred())
 	})
 
+	It("returns an error when getting physical core count fails", func() {
+		src.cpuPhysicalCoreCountErr = errors.New("an error")
+
+		_, err := c.Collect()
+		Expect(err).To(HaveOccurred())
+	})
+
 	It("returns an error when getting networks fails", func() {
 		src.netIOCountersErr = errors.New("an error")
 
@@ -366,15 +382,16 @@ type stubRawCollector struct {
 	diskIOCountersNames []string
 	cannotFindPartition bool
 
-	virtualMemoryErr       error
-	swapMemoryErr          error
-	cpuLoadErr             error
-	cpuTimesErr            error
-	netIOCountersErr       error
-	diskIOCountersErr      error
-	systemDiskUsageErr     error
-	ephemeralDiskUsageErr  error
-	persistentDiskUsageErr error
+	virtualMemoryErr        error
+	swapMemoryErr           error
+	cpuLoadErr              error
+	cpuTimesErr             error
+	cpuPhysicalCoreCountErr error
+	netIOCountersErr        error
+	diskIOCountersErr       error
+	systemDiskUsageErr      error
+	ephemeralDiskUsageErr   error
+	persistentDiskUsageErr  error
 
 	protoCountersError error
 
@@ -384,12 +401,16 @@ type stubRawCollector struct {
 	healthyInvalidJSON bool
 	healthyErr         error
 
-	user   float64
-	system float64
-	idle   float64
-	wait   float64
+	user          float64
+	system        float64
+	idle          float64
+	wait          float64
+	physicalCores int
 }
 
+func (s *stubRawCollector) PhysicalCores(ctx context.Context) (int, error) {
+	return s.physicalCores, s.cpuPhysicalCoreCountErr
+}
 func (s *stubRawCollector) ProtoCountersWithContext(_ context.Context, protocols []string) ([]net.ProtoCountersStat, error) {
 	if s.protoCountersError != nil {
 		return nil, s.protoCountersError

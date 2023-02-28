@@ -25,7 +25,9 @@ const (
 
 type SystemStat struct {
 	CPUStat
-	CPUCoreStats []CPUCoreStat
+	CPUCoreStats         []CPUCoreStat
+	CPUPhysicalCoreCount int
+	CPUThreadsPerCore    int
 
 	MemKB      uint64
 	MemPercent float64
@@ -176,6 +178,11 @@ func (c *Collector) Collect() (SystemStat, error) {
 
 	c.prevCoreStats = coreTs
 
+	pCores, err := c.rawCollector.PhysicalCores(ctx)
+	if err != nil {
+		return SystemStat{}, err
+	}
+
 	sdisk, err := c.diskStat(ctx, systemDiskPath)
 	if err != nil {
 		return SystemStat{}, err
@@ -202,8 +209,10 @@ func (c *Collector) Collect() (SystemStat, error) {
 	}
 
 	return SystemStat{
-		CPUStat:      cpu,
-		CPUCoreStats: coreStats,
+		CPUStat:              cpu,
+		CPUCoreStats:         coreStats,
+		CPUPhysicalCoreCount: pCores,
+		CPUThreadsPerCore:    len(coreStats) / pCores,
 
 		MemKB:      (m.Total - m.Available) / 1024,
 		MemPercent: float64(m.Total-m.Available) / float64(m.Total) * 100,
@@ -374,6 +383,7 @@ type RawCollector interface {
 	SwapMemoryWithContext(context.Context) (*mem.SwapMemoryStat, error)
 	AvgWithContext(context.Context) (*load.AvgStat, error)
 	TimesWithContext(context.Context, bool) ([]cpu.TimesStat, error)
+	PhysicalCores(context.Context) (int, error)
 	UsageWithContext(context.Context, string) (*disk.UsageStat, error)
 	NetIOCountersWithContext(context.Context, bool) ([]net.IOCountersStat, error)
 	DiskIOCountersWithContext(context.Context, ...string) (map[string]disk.IOCountersStat, error)
@@ -401,6 +411,10 @@ func (s defaultRawCollector) SwapMemoryWithContext(ctx context.Context) (*mem.Sw
 
 func (s defaultRawCollector) TimesWithContext(ctx context.Context, perCPU bool) ([]cpu.TimesStat, error) {
 	return cpu.TimesWithContext(ctx, perCPU)
+}
+
+func (s defaultRawCollector) PhysicalCores(ctx context.Context) (int, error) {
+	return cpu.CountsWithContext(ctx, false)
 }
 
 func (s defaultRawCollector) UsageWithContext(ctx context.Context, path string) (*disk.UsageStat, error) {
