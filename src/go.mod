@@ -8,7 +8,7 @@ require (
 	github.com/onsi/ginkgo/v2 v2.8.4
 	github.com/onsi/gomega v1.27.1
 	github.com/prometheus/client_golang v1.14.0
-	github.com/shirou/gopsutil/v3 v3.23.1
+	github.com/shirou/gopsutil/v3 v3.23.2
 )
 
 require (
