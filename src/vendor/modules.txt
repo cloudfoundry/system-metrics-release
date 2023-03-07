@@ -46,7 +46,7 @@ github.com/lufia/plan9stats
 # github.com/matttproud/golang_protobuf_extensions v1.0.1
 ## explicit
 github.com/matttproud/golang_protobuf_extensions/pbutil
-# github.com/onsi/ginkgo/v2 v2.8.4
+# github.com/onsi/ginkgo/v2 v2.9.0
 ## explicit; go 1.18
 github.com/onsi/ginkgo/v2
 github.com/onsi/ginkgo/v2/config
@@ -123,6 +123,7 @@ github.com/tklauser/numcpus
 github.com/yusufpapurcu/wmi
 # golang.org/x/net v0.7.0
 ## explicit; go 1.17
+golang.org/x/net/context
 golang.org/x/net/html
 golang.org/x/net/html/atom
 golang.org/x/net/html/charset
