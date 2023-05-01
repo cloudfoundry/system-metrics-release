@@ -101,7 +101,7 @@ github.com/prometheus/procfs/internal/fs
 github.com/prometheus/procfs/internal/util
 # github.com/rogpeppe/go-internal v1.9.0
 ## explicit; go 1.17
-# github.com/shirou/gopsutil/v3 v3.23.3
+# github.com/shirou/gopsutil/v3 v3.23.4
 ## explicit; go 1.15
 github.com/shirou/gopsutil/v3/cpu
 github.com/shirou/gopsutil/v3/disk
@@ -109,7 +109,7 @@ github.com/shirou/gopsutil/v3/internal/common
 github.com/shirou/gopsutil/v3/load
 github.com/shirou/gopsutil/v3/mem
 github.com/shirou/gopsutil/v3/net
-# github.com/shoenig/go-m1cpu v0.1.4
+# github.com/shoenig/go-m1cpu v0.1.5
 ## explicit; go 1.20
 github.com/shoenig/go-m1cpu
 # github.com/square/certstrap v1.2.0
@@ -130,7 +130,7 @@ golang.org/x/net/context
 golang.org/x/net/html
 golang.org/x/net/html/atom
 golang.org/x/net/html/charset
-# golang.org/x/sys v0.6.0
+# golang.org/x/sys v0.7.0
 ## explicit; go 1.17
 golang.org/x/sys/internal/unsafeheader
 golang.org/x/sys/unix
