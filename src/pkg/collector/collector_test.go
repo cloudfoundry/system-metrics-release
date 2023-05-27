@@ -7,7 +7,7 @@ import (
 	"log"
 	"syscall"
 
-	"code.cloudfoundry.org/system-metrics/pkg/collector"
+	"code.cloudfoundry.org/system-metrics-release/src/pkg/collector"
 	"github.com/shirou/gopsutil/v3/cpu"
 	"github.com/shirou/gopsutil/v3/disk"
 	"github.com/shirou/gopsutil/v3/load"

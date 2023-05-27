@@ -1,4 +1,4 @@
-module code.cloudfoundry.org/system-metrics
+module code.cloudfoundry.org/system-metrics-release/src
 
 go 1.20
 

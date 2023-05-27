@@ -4,7 +4,7 @@ import (
 	"log"
 	"time"
 
-	"code.cloudfoundry.org/system-metrics/pkg/collector"
+	"code.cloudfoundry.org/system-metrics-release/src/pkg/collector"
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
 )

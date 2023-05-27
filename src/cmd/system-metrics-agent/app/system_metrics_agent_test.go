@@ -8,10 +8,10 @@ import (
 	"strings"
 	"time"
 
-	"code.cloudfoundry.org/system-metrics/pkg/collector"
+	"code.cloudfoundry.org/system-metrics-release/src/pkg/collector"
 
-	"code.cloudfoundry.org/system-metrics/cmd/system-metrics-agent/app"
-	"code.cloudfoundry.org/system-metrics/internal/testhelper"
+	"code.cloudfoundry.org/system-metrics-release/src/cmd/system-metrics-agent/app"
+	"code.cloudfoundry.org/system-metrics-release/src/internal/testhelper"
 
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"

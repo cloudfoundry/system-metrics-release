@@ -1,7 +1,7 @@
 package stats_test
 
 import (
-	"code.cloudfoundry.org/system-metrics/pkg/egress/stats"
+	"code.cloudfoundry.org/system-metrics-release/src/pkg/egress/stats"
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
 	"github.com/prometheus/client_golang/prometheus"

@@ -10,8 +10,8 @@ import (
 	"sync"
 	"time"
 
-	"code.cloudfoundry.org/system-metrics/pkg/collector"
-	"code.cloudfoundry.org/system-metrics/pkg/egress/stats"
+	"code.cloudfoundry.org/system-metrics-release/src/pkg/collector"
+	"code.cloudfoundry.org/system-metrics-release/src/pkg/egress/stats"
 	"code.cloudfoundry.org/tlsconfig"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promhttp"

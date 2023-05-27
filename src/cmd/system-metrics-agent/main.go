@@ -4,9 +4,9 @@ import (
 	"log"
 	"os"
 
-	"code.cloudfoundry.org/system-metrics/pkg/collector"
+	"code.cloudfoundry.org/system-metrics-release/src/pkg/collector"
 
-	"code.cloudfoundry.org/system-metrics/cmd/system-metrics-agent/app"
+	"code.cloudfoundry.org/system-metrics-release/src/cmd/system-metrics-agent/app"
 )
 
 func main() {

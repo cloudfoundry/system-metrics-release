@@ -1,8 +1,8 @@
 package stats_test
 
 import (
-	"code.cloudfoundry.org/system-metrics/pkg/collector"
-	"code.cloudfoundry.org/system-metrics/pkg/egress/stats"
+	"code.cloudfoundry.org/system-metrics-release/src/pkg/collector"
+	"code.cloudfoundry.org/system-metrics-release/src/pkg/egress/stats"
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
 )
