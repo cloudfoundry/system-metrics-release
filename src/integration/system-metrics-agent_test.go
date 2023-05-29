@@ -7,10 +7,11 @@ import (
 	"net/http"
 	"os"
 	"os/exec"
+	"runtime"
 	"strings"
 
+	sma "code.cloudfoundry.org/system-metrics-release/src/integration/systemmetricsagent"
 	"code.cloudfoundry.org/system-metrics-release/src/internal/testhelper"
-	"code.cloudfoundry.org/tlsconfig"
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
 	"github.com/onsi/gomega/gexec"
@@ -91,30 +92,12 @@ var _ = Describe("System Metrics Agent", Ordered, func() {
 		})
 
 		It("returns a successful prometheus response", func() {
-			cfg, err := tlsconfig.Build(
-				tlsconfig.WithInternalServiceDefaults(),
-				tlsconfig.WithIdentityFromFile(tc.Cert("system-metrics-agent"), tc.Key("system-metrics-agent")),
-			).Client(
-				tlsconfig.WithAuthorityFromFile(tc.CA()),
-				tlsconfig.WithServerName("system-metrics-agent"),
-			)
+			client, err := sma.NewClient(tc)
 			Expect(err).NotTo(HaveOccurred())
 
-			client := &http.Client{
-				Transport: &http.Transport{
-					TLSClientConfig: cfg,
-				},
-			}
-
-			expectedSubstr := `
-# HELP system_cpu_idle vm metric
-# TYPE system_cpu_idle gauge
-system_cpu_idle{deployment="test-deployment",index="test-index",ip="test-ip",job="test-job",origin="system_metrics_agent",source_id="system_metrics_agent",unit="Percent"}`
-
-			var resp *http.Response
 			Eventually(func() error {
 				var err error
-				resp, err = client.Get("https://localhost:8080/metrics")
+				resp, err := client.Get("https://localhost:8080/metrics")
 				if err != nil {
 					return err
 				}
@@ -130,12 +113,91 @@ system_cpu_idle{deployment="test-deployment",index="test-index",ip="test-ip",job
 				}
 
 				body := string(b)
-				if !strings.Contains(body, expectedSubstr) {
+				if !strings.Contains(body, "# HELP") {
 					return fmt.Errorf("unexpected response body: %s", body)
 				}
-
 				return nil
 			}, "5s").Should(Succeed())
+		})
+
+		Context("when running in Windows", func() {
+			BeforeEach(func() {
+				if runtime.GOOS != "windows" {
+					Skip("Skipping on non-Windows")
+				}
+			})
+
+			It("returns expected metrics", func() {
+				client, err := sma.NewClient(tc)
+				Expect(err).NotTo(HaveOccurred())
+
+				var body string
+				Eventually(func() error {
+					var err error
+					resp, err := client.Get("https://localhost:8080/metrics")
+					if err != nil {
+						return err
+					}
+					defer resp.Body.Close()
+
+					if resp.StatusCode != 200 {
+						return fmt.Errorf("expected 200 status code, got %d", resp.StatusCode)
+					}
+
+					b, err := io.ReadAll(resp.Body)
+					if err != nil {
+						return fmt.Errorf("failed to read response body: %w", err)
+					}
+					body = string(b)
+					return nil
+				}, "3s").Should(Succeed())
+
+				fmt.Println(body)
+
+				for _, m := range sma.WINDOWS_METRIC_NAMES {
+					Expect(body).To(MatchRegexp(fmt.Sprintf(sma.MetricSubstrForRegexCmp, m)))
+				}
+			})
+		})
+
+		Context("when running in Linux", func() {
+			BeforeEach(func() {
+				if runtime.GOOS != "linux" {
+					Skip("Skipping on non-Linux")
+				}
+			})
+
+			It("returns expected metrics", func() {
+				client, err := sma.NewClient(tc)
+				Expect(err).NotTo(HaveOccurred())
+
+				var body string
+				Eventually(func() error {
+					var err error
+					resp, err := client.Get("https://localhost:8080/metrics")
+					if err != nil {
+						return err
+					}
+					defer resp.Body.Close()
+
+					if resp.StatusCode != 200 {
+						return fmt.Errorf("expected 200 status code, got %d", resp.StatusCode)
+					}
+
+					b, err := io.ReadAll(resp.Body)
+					if err != nil {
+						return fmt.Errorf("failed to read response body: %w", err)
+					}
+					body = string(b)
+					return nil
+				}, "3s").Should(Succeed())
+
+				fmt.Println(body)
+
+				for _, m := range sma.LINUX_METRIC_NAMES {
+					Expect(body).To(MatchRegexp(fmt.Sprintf(sma.MetricSubstrForRegexCmp, m)))
+				}
+			})
 		})
 	})
 })
