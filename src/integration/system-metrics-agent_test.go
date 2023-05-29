@@ -8,7 +8,6 @@ import (
 	"os"
 	"os/exec"
 	"strings"
-	"time"
 
 	"code.cloudfoundry.org/system-metrics-release/src/internal/testhelper"
 	"code.cloudfoundry.org/tlsconfig"
@@ -60,7 +59,7 @@ var _ = Describe("System Metrics Agent", Ordered, func() {
 	})
 
 	AfterAll(func() {
-		session.Terminate().Wait(2 * time.Second)
+		session.Terminate().Wait()
 	})
 
 	Describe("metrics endpoint", func() {
