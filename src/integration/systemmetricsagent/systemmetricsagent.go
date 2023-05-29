@@ -118,4 +118,4 @@ var WINDOWS_METRIC_NAMES = [...]string{
 
 var MetricSubstrForRegexCmp = `# HELP %[1]s vm metric
 # TYPE %[1]s (counter|gauge)
-%[1]s{.*deployment="test-deployment",index="test-index",ip="test-ip",job="test-job",origin="system_metrics_agent",source_id="system_metrics_agent",unit="Percent"}`
+%[1]s{.*deployment="test-deployment",index="test-index",ip="test-ip",job="test-job",origin="system_metrics_agent",source_id="system_metrics_agent",unit="(Percent|Cores|Threads)"}`
