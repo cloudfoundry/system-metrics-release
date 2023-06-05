@@ -1,7 +1,7 @@
 package stats
 
 import (
-	"code.cloudfoundry.org/system-metrics/pkg/collector"
+	"code.cloudfoundry.org/system-metrics-release/src/pkg/collector"
 )
 
 type Gauge interface {
