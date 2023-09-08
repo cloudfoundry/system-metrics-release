@@ -1,0 +1,44 @@
+name: system-metrics
+version: 3.0.1
+commit_hash: "0438466"
+uncommitted_changes: false
+jobs:
+- name: loggr-system-metrics-agent
+  version: 25c9dd448322de48eccac8c55d6c77652732f96507c93dfbf5aeff8e8147332b
+  fingerprint: 25c9dd448322de48eccac8c55d6c77652732f96507c93dfbf5aeff8e8147332b
+  sha1: sha256:36178f2078e0fe1dec462e1cc074b31911ad40d89b7ac465e398e62066970622
+  packages:
+  - system-metrics-agent
+- name: loggr-system-metrics-agent-windows
+  version: d442a66c8d88617113163fc2619f5f10bbaf4c1dfac254b9e5f9f3901392e4bb
+  fingerprint: d442a66c8d88617113163fc2619f5f10bbaf4c1dfac254b9e5f9f3901392e4bb
+  sha1: sha256:c510542458a87c8a2c27ceba17ed912d4a1ca90b64e015c002b5745e937e4c89
+  packages:
+  - system-metrics-agent-windows
+packages:
+- name: golang-1.20-linux
+  version: de30d3696534fef3c337f1526a83e7515dc2475523aaf4fad2b0e3e96e1eebfe
+  fingerprint: de30d3696534fef3c337f1526a83e7515dc2475523aaf4fad2b0e3e96e1eebfe
+  sha1: sha256:29b3088447b47a4bf83fb01514000e08ae0b5e8a0c7d981d3b41f12f14d69450
+  dependencies: []
+- name: golang-1.20-windows
+  version: ef213f2a7db017ed7ade16caae2c95542f70eaf5533a2043f1c8511377552ea3
+  fingerprint: ef213f2a7db017ed7ade16caae2c95542f70eaf5533a2043f1c8511377552ea3
+  sha1: sha256:2bbbbe89fdfc80c8db8d7a731297a768258bc84f2d35cb4a47cc2f56ce2ed6af
+  dependencies: []
+- name: system-metrics-agent
+  version: 2511be2d1a422a9059e6047eda115c79196b90879d82152159d7f36c085c399d
+  fingerprint: 2511be2d1a422a9059e6047eda115c79196b90879d82152159d7f36c085c399d
+  sha1: sha256:008a320396478e8740ad1f8a4e73976000435d187ca78ef02a395561c6b831b8
+  dependencies:
+  - golang-1.20-linux
+- name: system-metrics-agent-windows
+  version: b92aa27ad5d0413cbec7bbdcf2d6957171255a9b5b806ae5568e92823968bce5
+  fingerprint: b92aa27ad5d0413cbec7bbdcf2d6957171255a9b5b806ae5568e92823968bce5
+  sha1: sha256:78bb975834a2b3925594d5f9345cedd3163d944e92cb0b52bd728232448b9c96
+  dependencies:
+  - golang-1.20-windows
+license:
+  version: b3d3a6be0a737881904a718497cb593042aa0ec56ad91b93934e395a2f9c1a3d
+  fingerprint: b3d3a6be0a737881904a718497cb593042aa0ec56ad91b93934e395a2f9c1a3d
+  sha1: sha256:2117397f6c28f12b6527c3b4f156a76f1829ffb74eae88e2639fb12ae8c9323e
