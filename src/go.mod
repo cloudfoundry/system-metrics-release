@@ -6,7 +6,7 @@ toolchain go1.22.8
 
 require (
 	code.cloudfoundry.org/go-envstruct v1.7.0
-	code.cloudfoundry.org/tlsconfig v0.8.0
+	code.cloudfoundry.org/tlsconfig v0.9.0
 	github.com/onsi/ginkgo/v2 v2.21.0
 	github.com/onsi/gomega v1.35.1
 	github.com/prometheus/client_golang v1.20.5
