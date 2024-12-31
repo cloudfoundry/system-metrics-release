@@ -1,8 +1,6 @@
 module code.cloudfoundry.org/system-metrics-release/src
 
-go 1.22.0
-
-toolchain go1.22.10
+go 1.23.0
 
 require (
 	code.cloudfoundry.org/go-envstruct v1.7.0
