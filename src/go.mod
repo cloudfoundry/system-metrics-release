@@ -6,7 +6,7 @@ toolchain go1.23.6
 
 require (
 	code.cloudfoundry.org/go-envstruct v1.7.0
-	code.cloudfoundry.org/tlsconfig v0.18.0
+	code.cloudfoundry.org/tlsconfig v0.19.0
 	github.com/onsi/ginkgo/v2 v2.22.2
 	github.com/onsi/gomega v1.36.2
 	github.com/prometheus/client_golang v1.21.0
@@ -37,7 +37,7 @@ require (
 	github.com/tklauser/numcpus v0.9.0 // indirect
 	github.com/yusufpapurcu/wmi v1.2.4 // indirect
 	go.step.sm/crypto v0.58.0 // indirect
-	golang.org/x/crypto v0.34.0 // indirect
+	golang.org/x/crypto v0.35.0 // indirect
 	golang.org/x/net v0.35.0 // indirect
 	golang.org/x/sys v0.30.0 // indirect
 	golang.org/x/text v0.22.0 // indirect
