@@ -1,7 +1,7 @@
 code.cloudfoundry.org/go-envstruct v1.7.0 h1:6e90Z+lTPrI2jMJOoKErskL7a+Qm97GFiithcXeVWdk=
 code.cloudfoundry.org/go-envstruct v1.7.0/go.mod h1:xm6Eto/WB7Qq1iwEN29jUQXDeUCJ+nruwAnnrpY0s4E=
-code.cloudfoundry.org/tlsconfig v0.19.0 h1:HOpEtyQ+M0z6XT4F28/b4oY3DKfHy4rh5ITf3zJ/WLE=
-code.cloudfoundry.org/tlsconfig v0.19.0/go.mod h1:Tw1bAcguRWrUAtMBX1g9cFbejKWoeHzMjhejZyVUJ0Q=
+code.cloudfoundry.org/tlsconfig v0.20.0 h1:KutIw0C20n/v2sOYIzaTiE85IZzUJXbSRWGYZqzy7rs=
+code.cloudfoundry.org/tlsconfig v0.20.0/go.mod h1:EmhTAjI91VUkKhShpS6TmwFw3QDh0cXzcETpnDdtAq0=
 filippo.io/edwards25519 v1.1.0 h1:FNf4tywRC1HmFuKW5xopWpigGjJKiJSV0Cqo0cJWDaA=
 filippo.io/edwards25519 v1.1.0/go.mod h1:BxyFTGdWcka3PhytdK4V28tE5sGfRvvvRV7EaN4VDT4=
 github.com/beorn7/perks v1.0.1 h1:VlbKKnNfV8bJzeqoa4cOKqO6bYr3WgKZxO8Z16+hsOM=
