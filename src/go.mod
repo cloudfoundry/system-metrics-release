@@ -6,7 +6,7 @@ toolchain go1.23.7
 
 require (
 	code.cloudfoundry.org/go-envstruct v1.7.0
-	code.cloudfoundry.org/tlsconfig v0.20.0
+	code.cloudfoundry.org/tlsconfig v0.21.0
 	github.com/onsi/ginkgo/v2 v2.23.0
 	github.com/onsi/gomega v1.36.2
 	github.com/prometheus/client_golang v1.21.1
@@ -21,7 +21,7 @@ require (
 	github.com/go-ole/go-ole v1.3.0 // indirect
 	github.com/go-task/slim-sprig/v3 v3.0.0 // indirect
 	github.com/google/go-cmp v0.7.0 // indirect
-	github.com/google/pprof v0.0.0-20250302191652-9094ed2288e7 // indirect
+	github.com/google/pprof v0.0.0-20250315033105-103756e64e1d // indirect
 	github.com/klauspost/compress v1.18.0 // indirect
 	github.com/kr/text v0.2.0 // indirect
 	github.com/lufia/plan9stats v0.0.0-20250303091104-876f3ea5145d // indirect
@@ -29,7 +29,7 @@ require (
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/power-devops/perfstat v0.0.0-20240221224432-82ca36839d55 // indirect
 	github.com/prometheus/client_model v0.6.1 // indirect
-	github.com/prometheus/common v0.62.0 // indirect
+	github.com/prometheus/common v0.63.0 // indirect
 	github.com/prometheus/procfs v0.15.1 // indirect
 	github.com/shoenig/go-m1cpu v0.1.6 // indirect
 	github.com/square/certstrap v1.3.0 // indirect
