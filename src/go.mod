@@ -2,11 +2,11 @@ module code.cloudfoundry.org/system-metrics-release/src
 
 go 1.23.0
 
-toolchain go1.23.7
+toolchain go1.24.1
 
 require (
 	code.cloudfoundry.org/go-envstruct v1.7.0
-	code.cloudfoundry.org/tlsconfig v0.22.0
+	code.cloudfoundry.org/tlsconfig v0.23.0
 	github.com/onsi/ginkgo/v2 v2.23.3
 	github.com/onsi/gomega v1.36.3
 	github.com/prometheus/client_golang v1.21.1
