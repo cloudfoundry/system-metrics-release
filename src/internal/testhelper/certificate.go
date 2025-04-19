@@ -72,7 +72,7 @@ func tmpFile(prefix string, caBytes []byte) string {
 	if err != nil {
 		log.Fatal(err)
 	}
-	defer file.Close()
+	defer file.Close() //nolint:errcheck
 
 	_, err = file.Write(caBytes)
 	if err != nil {

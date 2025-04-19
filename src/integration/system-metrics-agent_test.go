@@ -29,26 +29,46 @@ var _ = Describe("System Metrics Agent", Ordered, func() {
 
 		// setup agent configuration
 		DeferCleanup(os.Setenv, "METRIC_PORT", os.Getenv("METRIC_PORT"))
-		os.Setenv("METRIC_PORT", "8080")
+		err = os.Setenv("METRIC_PORT", "8080")
+		Expect(err).NotTo(HaveOccurred())
+
 		DeferCleanup(os.Setenv, "LIMITED_METRICS", os.Getenv("LIMITED_METRICS"))
-		os.Setenv("LIMITED_METRICS", "false")
+		err = os.Setenv("LIMITED_METRICS", "false")
+		Expect(err).NotTo(HaveOccurred())
+
 		DeferCleanup(os.Setenv, "SAMPLE_INTERVAL", os.Getenv("SAMPLE_INTERVAL"))
-		os.Setenv("SAMPLE_INTERVAL", "1s")
+		err = os.Setenv("SAMPLE_INTERVAL", "1s")
+		Expect(err).NotTo(HaveOccurred())
+
 		DeferCleanup(os.Setenv, "DEPLOYMENT", os.Getenv("DEPLOYMENT"))
-		os.Setenv("DEPLOYMENT", "test-deployment")
+		err = os.Setenv("DEPLOYMENT", "test-deployment")
+		Expect(err).NotTo(HaveOccurred())
+
 		DeferCleanup(os.Setenv, "JOB", os.Getenv("JOB"))
-		os.Setenv("JOB", "test-job")
+		err = os.Setenv("JOB", "test-job")
+		Expect(err).NotTo(HaveOccurred())
+
 		DeferCleanup(os.Setenv, "INDEX", os.Getenv("INDEX"))
-		os.Setenv("INDEX", "test-index")
+		err = os.Setenv("INDEX", "test-index")
+		Expect(err).NotTo(HaveOccurred())
+
 		DeferCleanup(os.Setenv, "IP", os.Getenv("IP"))
-		os.Setenv("IP", "test-ip")
+		err = os.Setenv("IP", "test-ip")
+		Expect(err).NotTo(HaveOccurred())
+
 		tc = testhelper.GenerateCerts("systemMetricsCA")
+
 		DeferCleanup(os.Setenv, "CA_CERT_PATH", os.Getenv("CA_CERT_PATH"))
-		os.Setenv("CA_CERT_PATH", tc.CA())
+		err = os.Setenv("CA_CERT_PATH", tc.CA())
+		Expect(err).NotTo(HaveOccurred())
+
 		DeferCleanup(os.Setenv, "CERT_PATH", os.Getenv("CERT_PATH"))
-		os.Setenv("CERT_PATH", tc.Cert("system-metrics-agent"))
+		err = os.Setenv("CERT_PATH", tc.Cert("system-metrics-agent"))
+		Expect(err).NotTo(HaveOccurred())
+
 		DeferCleanup(os.Setenv, "KEY_PATH", os.Getenv("KEY_PATH"))
-		os.Setenv("KEY_PATH", tc.Key("system-metrics-agent"))
+		err = os.Setenv("KEY_PATH", tc.Key("system-metrics-agent"))
+		Expect(err).NotTo(HaveOccurred())
 
 		// run agent
 		command := exec.Command(pathToSystemMetricsAgent)
@@ -68,7 +88,7 @@ var _ = Describe("System Metrics Agent", Ordered, func() {
 				resp, err = http.Get("http://localhost:8080/metrics")
 				return err
 			}, "3s").Should(Succeed())
-			defer resp.Body.Close()
+			defer resp.Body.Close() //nolint:errcheck
 
 			Expect(resp.StatusCode).To(Equal(400))
 		})
@@ -116,7 +136,7 @@ system_cpu_idle{deployment="test-deployment",index="test-index",ip="test-ip",job
 				if err != nil {
 					return err
 				}
-				defer resp.Body.Close()
+				defer resp.Body.Close() //nolint:errcheck
 
 				if resp.StatusCode != 200 {
 					return fmt.Errorf("expected 200 status code, got %d", resp.StatusCode)
