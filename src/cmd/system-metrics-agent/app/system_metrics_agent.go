@@ -71,7 +71,7 @@ func (a *SystemMetricsAgent) Shutdown(ctx context.Context) {
 	defer a.mu.Unlock()
 
 	if a.debugLis != nil {
-		a.debugLis.Close()
+		a.debugLis.Close() //nolint:errcheck
 	}
 
 	err := a.metricsServer.Shutdown(ctx)

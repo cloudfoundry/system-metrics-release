@@ -55,14 +55,14 @@ func (p PromSender) setSystemStats(stats collector.SystemStat) {
 	labels := p.labels
 
 	gauge := p.registry.Get("system_cpu_sys", p.origin, "Percent", labels)
-	gauge.Set(float64(stats.CPUStat.System))
+	gauge.Set(float64(stats.System))
 
 	gauge = p.registry.Get("system_cpu_wait", p.origin, "Percent", labels)
-	gauge.Set(float64(stats.CPUStat.Wait))
+	gauge.Set(float64(stats.Wait))
 
 	if !p.limitedMetrics {
 		gauge = p.registry.Get("system_cpu_idle", p.origin, "Percent", labels)
-		gauge.Set(float64(stats.CPUStat.Idle))
+		gauge.Set(float64(stats.Idle))
 	}
 
 	gauge = p.registry.Get("system_cpu_physical_core_count", p.origin, "Cores", labels)
@@ -72,7 +72,7 @@ func (p PromSender) setSystemStats(stats collector.SystemStat) {
 	gauge.Set(float64(stats.CPUThreadsPerCore))
 
 	gauge = p.registry.Get("system_cpu_user", p.origin, "Percent", labels)
-	gauge.Set(float64(stats.CPUStat.User))
+	gauge.Set(float64(stats.User))
 
 	if !p.limitedMetrics {
 		for _, perCoreStat := range stats.CPUCoreStats {
@@ -80,16 +80,16 @@ func (p PromSender) setSystemStats(stats collector.SystemStat) {
 			perCoreLabels["cpu_name"] = perCoreStat.CPU
 
 			gauge = p.registry.Get("system_cpu_core_sys", p.origin, "Percent", perCoreLabels)
-			gauge.Set(float64(perCoreStat.CPUStat.System))
+			gauge.Set(float64(perCoreStat.System))
 
 			gauge = p.registry.Get("system_cpu_core_wait", p.origin, "Percent", perCoreLabels)
-			gauge.Set(float64(perCoreStat.CPUStat.Wait))
+			gauge.Set(float64(perCoreStat.Wait))
 
 			gauge = p.registry.Get("system_cpu_core_idle", p.origin, "Percent", perCoreLabels)
-			gauge.Set(float64(perCoreStat.CPUStat.Idle))
+			gauge.Set(float64(perCoreStat.Idle))
 
 			gauge = p.registry.Get("system_cpu_core_user", p.origin, "Percent", perCoreLabels)
-			gauge.Set(float64(perCoreStat.CPUStat.User))
+			gauge.Set(float64(perCoreStat.User))
 		}
 	}
 

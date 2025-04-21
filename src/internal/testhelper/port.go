@@ -11,6 +11,6 @@ func GetFreePort() uint16 {
 		log.Fatal(err)
 	}
 
-	defer l.Close()
+	defer l.Close() //nolint:errcheck
 	return uint16(l.Addr().(*net.TCPAddr).Port)
 }
