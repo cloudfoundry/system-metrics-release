@@ -1,7 +1,7 @@
 # code.cloudfoundry.org/go-envstruct v1.7.0
 ## explicit; go 1.21
 code.cloudfoundry.org/go-envstruct
-# code.cloudfoundry.org/tlsconfig v0.24.0
+# code.cloudfoundry.org/tlsconfig v0.25.0
 ## explicit; go 1.23.0
 code.cloudfoundry.org/tlsconfig
 code.cloudfoundry.org/tlsconfig/certtest
@@ -33,8 +33,8 @@ github.com/google/go-cmp/cmp/internal/diff
 github.com/google/go-cmp/cmp/internal/flags
 github.com/google/go-cmp/cmp/internal/function
 github.com/google/go-cmp/cmp/internal/value
-# github.com/google/pprof v0.0.0-20250418163039-24c5476c6587
-## explicit; go 1.23
+# github.com/google/pprof v0.0.0-20250423184734-337e5dd93bb4
+## explicit; go 1.23.0
 github.com/google/pprof/profile
 # github.com/lufia/plan9stats v0.0.0-20250317134145-8bc96cf8fc35
 ## explicit; go 1.21
