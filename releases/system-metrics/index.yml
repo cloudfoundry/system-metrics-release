@@ -99,6 +99,8 @@ builds:
     version: 3.0.14
   f0c96e85-a2ac-4357-5eb5-6704f3cbae87:
     version: 2.0.6
+  f1b8d048-7fbc-4174-757e-b8e451a8e843:
+    version: 3.0.18
   f407e601-ca18-4ea9-72af-8f0289e477d7:
     version: 1.0.2
   f618662f-0fae-4fd9-6152-b1e2545bf26a:
