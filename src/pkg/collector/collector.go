@@ -5,8 +5,10 @@ import (
 	"encoding/json"
 	"log"
 	"os"
+	"os/exec"
 	"path/filepath"
 	"strings"
+	"sync/atomic"
 	"time"
 
 	"github.com/shirou/gopsutil/v3/cpu"
@@ -14,6 +16,8 @@ import (
 	"github.com/shirou/gopsutil/v3/load"
 	"github.com/shirou/gopsutil/v3/mem"
 	"github.com/shirou/gopsutil/v3/net"
+
+	"code.cloudfoundry.org/system-metrics-release/src/pkg/collector/clockdrift"
 )
 
 const (
@@ -48,6 +52,10 @@ type SystemStat struct {
 	Networks []NetworkStat
 
 	Health HealthStat
+
+	ClockDrift            *clockdrift.TimeSyncData
+	ClockDriftEnabled     bool
+	ClockDriftErrorsTotal uint64
 }
 
 type CPUCoreStat struct {
@@ -87,10 +95,21 @@ type ProtoCountersStat struct {
 	TCPRetransSegs int64
 }
 
+// Collector aggregates the system-metrics snapshot for a single VM.
+//
+// Concurrency: Collect is intended to be called from a single goroutine.
+// prevTimesStat and prevCoreStats are mutated in place by Collect and have
+// no synchronization; clockDriftErrors is the lone exception (touched via
+// atomic.AddUint64 / LoadUint64) so a future caller reading the running
+// total from another goroutine still sees a consistent value.
 type Collector struct {
-	rawCollector  RawCollector
-	prevTimesStat cpu.TimesStat
-	prevCoreStats []cpu.TimesStat
+	rawCollector        RawCollector
+	prevTimesStat       cpu.TimesStat
+	prevCoreStats       []cpu.TimesStat
+	clockSource         clockdrift.TimeSource
+	clockSourceExplicit bool
+	log                 *log.Logger
+	clockDriftErrors    uint64
 }
 
 type NetworkStat struct {
@@ -113,6 +132,7 @@ type HealthStat struct {
 func New(log *log.Logger, opts ...CollectorOption) Collector {
 	c := Collector{
 		rawCollector: defaultRawCollector{},
+		log:          log,
 	}
 
 	for _, o := range opts {
@@ -131,6 +151,14 @@ func New(log *log.Logger, opts ...CollectorOption) Collector {
 	c.prevCoreStats, err = c.rawCollector.TimesWithContext(ctx, true)
 	if err != nil {
 		log.Panicf("failed to collect initial CPU Core times: %s", err)
+	}
+
+	if !c.clockSourceExplicit {
+		if _, lookErr := exec.LookPath("chronyc"); lookErr == nil {
+			c.clockSource = clockdrift.NewChronyBackend(clockdrift.WithLogger(log))
+		} else {
+			log.Printf("chronyc not found in PATH, clock drift collection disabled")
+		}
 	}
 
 	return c
@@ -208,6 +236,18 @@ func (c *Collector) Collect() (SystemStat, error) {
 		return SystemStat{}, err
 	}
 
+	var driftData *clockdrift.TimeSyncData
+	if c.clockSource != nil {
+		driftData, err = c.clockSource.Collect(ctx)
+		if err != nil {
+			atomic.AddUint64(&c.clockDriftErrors, 1)
+			if c.log != nil {
+				c.log.Printf("failed to collect clock drift: %v", err)
+			}
+			driftData = nil
+		}
+	}
+
 	return SystemStat{
 		CPUStat:              cpu,
 		CPUCoreStats:         coreStats,
@@ -233,6 +273,10 @@ func (c *Collector) Collect() (SystemStat, error) {
 		Health: c.healthy(),
 
 		ProtoCounters: protoCounters,
+
+		ClockDrift:            driftData,
+		ClockDriftEnabled:     c.clockSource != nil,
+		ClockDriftErrorsTotal: atomic.LoadUint64(&c.clockDriftErrors),
 	}, nil
 }
 
@@ -396,6 +440,32 @@ type CollectorOption func(*Collector)
 func WithRawCollector(c RawCollector) CollectorOption {
 	return func(cs *Collector) {
 		cs.rawCollector = c
+	}
+}
+
+// WithClockSource overrides the default chronyc-on-PATH discovery used by
+// New. Pass a stub TimeSource in tests to make outcomes deterministic
+// regardless of whether the host has chronyc installed.
+//
+// Passing nil is a no-op (auto-discovery still runs); use WithoutClockSource
+// to disable clock drift collection explicitly.
+func WithClockSource(ts clockdrift.TimeSource) CollectorOption {
+	return func(cs *Collector) {
+		if ts == nil {
+			return
+		}
+		cs.clockSource = ts
+		cs.clockSourceExplicit = true
+	}
+}
+
+// WithoutClockSource disables clock drift collection entirely, bypassing the
+// default chronyc-on-PATH discovery. The collector emits no clock_drift_*
+// metrics and reports ClockDriftEnabled == false.
+func WithoutClockSource() CollectorOption {
+	return func(cs *Collector) {
+		cs.clockSource = nil
+		cs.clockSourceExplicit = true
 	}
 }
 

@@ -1,7 +1,10 @@
 package stats
 
 import (
+	"math"
+
 	"code.cloudfoundry.org/system-metrics-release/src/pkg/collector"
+	"code.cloudfoundry.org/system-metrics-release/src/pkg/collector/clockdrift"
 )
 
 type Gauge interface {
@@ -37,6 +40,10 @@ func (p PromSender) Send(stats collector.SystemStat) {
 	p.setSystemDiskGauges(stats)
 	p.setEphemeralDiskGauges(stats)
 	p.setPersistentDiskGauges(stats)
+	// Clock drift metrics are NOT gated by limitedMetrics: PCI-DSS 10.4.1
+	// audit evidence must be available regardless of cost-mode opt-outs, and
+	// the trimmed lean set is small enough that cost is not a concern.
+	p.setClockDriftGauges(stats)
 
 	for _, network := range stats.Networks {
 		p.setNetworkGauges(network)
@@ -267,5 +274,145 @@ func (p PromSender) setPersistentDiskGauges(stats collector.SystemStat) {
 
 		gauge = p.registry.Get("system_disk_persistent_io_time", p.origin, "ms", labels)
 		gauge.Set(float64(stats.PersistentDisk.IOTime))
+	}
+}
+
+// setClockDriftGauges emits PCI-DSS 10.6 audit-evidence metrics for the
+// local clock's NTP-sync state.
+//
+// Design notes:
+//   - The reference id/host pair is exposed once via clock_drift_reference_info
+//     rather than as labels on every numeric gauge. Promoting them to per-gauge
+//     labels would multiply Prometheus cardinality by N peers per chrony
+//     reselection -- a slow-burn memory leak in PromRegistry that long-lived
+//     VMs cannot recover from. The reference info gauge itself is the only
+//     surface where peer rotation widens the series set, and it is bounded
+//     in practice (a typical VM sees <10 peers over its lifetime).
+//   - LeapStatus is one gauge with a status label, following the
+//     kube-state-metrics convention. This lets dashboards distinguish
+//     LeapUnknown (parse failure) from LeapNotSynchronised, which the previous
+//     four-boolean design could not.
+//   - Numeric fields use math.NaN() (or nil pointers) as a sentinel for
+//     "the underlying tool emitted a value we could not parse". The gauge is
+//     deliberately NOT set in that case so a parser regression cannot manifest
+//     as a misleading zero -- which an auditor would read as "perfect clock
+//     sync" and miss the underlying breakage.
+//   - clock_drift_collection_errors is emitted whenever clock drift
+//     collection is enabled (even if the latest cycle succeeded), so
+//     operators can alert on rate(...) > 0 without the metric flickering in
+//     and out of existence. The metric is named without the _total suffix
+//     because Prometheus reserves _total for Counter; we expose a Gauge that
+//     happens to monotonically increase in-process, and rate() works on it
+//     identically.
+func (p PromSender) setClockDriftGauges(stats collector.SystemStat) {
+	if !stats.ClockDriftEnabled {
+		return
+	}
+
+	labels := p.labels
+
+	errs := p.registry.Get("clock_drift_collection_errors", p.origin, "", labels)
+	errs.Set(float64(stats.ClockDriftErrorsTotal))
+
+	if stats.ClockDrift == nil {
+		return
+	}
+
+	p.setClockDriftReferenceInfo(stats.ClockDrift)
+	p.setClockDriftLeapStatus(stats.ClockDrift)
+	p.setClockDriftNumericGauges(stats.ClockDrift)
+}
+
+func (p PromSender) setClockDriftReferenceInfo(d *clockdrift.TimeSyncData) {
+	infoLabels := clone(p.labels)
+	infoLabels["reference_id"] = nonEmpty(d.ReferenceID, "unknown")
+	infoLabels["reference_host"] = nonEmpty(d.ReferenceHost, "unknown")
+	infoLabels["source"] = clockdrift.BackendChrony
+
+	gauge := p.registry.Get("clock_drift_reference_info", p.origin, "", infoLabels)
+	gauge.Set(1.0)
+}
+
+func (p PromSender) setClockDriftLeapStatus(d *clockdrift.TimeSyncData) {
+	for _, status := range clockdrift.LeapStatusValues {
+		labels := clone(p.labels)
+		labels["status"] = leapStatusLabel(status)
+
+		val := 0.0
+		if d.LeapStatus == status {
+			val = 1.0
+		}
+		gauge := p.registry.Get("clock_drift_leap_status", p.origin, "", labels)
+		gauge.Set(val)
+	}
+}
+
+// setClockDriftNumericGauges emits the lean PCI-DSS-plus-operations set:
+// system_time_offset_seconds and last_offset_seconds for compliance evidence,
+// frequency_ppm and root_delay_seconds for IaaS/network diagnostics, and
+// stratum as the at-a-glance health indicator. The chrony-internal smoothing
+// and error-bound metrics (rms_offset, residual_freq_ppm, skew_ppm,
+// root_dispersion, update_interval, ref_time_unix) are deliberately
+// commented out: they have no operational or audit value at the foundation
+// scope, and uncommenting any line below is sufficient to bring them back.
+// The clockdrift parser still populates every TimeSyncData field unchanged.
+func (p PromSender) setClockDriftNumericGauges(d *clockdrift.TimeSyncData) {
+	labels := p.labels
+
+	setIfFinite := func(name, unit string, value float64) {
+		if math.IsNaN(value) || math.IsInf(value, 0) {
+			return
+		}
+		gauge := p.registry.Get(name, p.origin, unit, labels)
+		gauge.Set(value)
+	}
+
+	setIfFinite("clock_drift_system_time_offset_seconds", "Seconds", d.SystemTimeOffsetSec)
+	setIfFinite("clock_drift_last_offset_seconds", "Seconds", d.LastOffsetSec)
+	setIfFinite("clock_drift_frequency_ppm", "ppm", d.FrequencyPPM)
+	setIfFinite("clock_drift_root_delay_seconds", "Seconds", d.RootDelaySec)
+
+	// Trimmed -- see helper doc above.
+	// setIfFinite("clock_drift_rms_offset_seconds", "Seconds", d.RMSOffsetSec)
+	// setIfFinite("clock_drift_residual_freq_ppm", "ppm", d.ResidualFreqPPM)
+	// setIfFinite("clock_drift_skew_ppm", "ppm", d.SkewPPM)
+	// setIfFinite("clock_drift_root_dispersion_seconds", "Seconds", d.RootDispersionSec)
+	// setIfFinite("clock_drift_update_interval_seconds", "Seconds", d.UpdateIntervalSec)
+
+	if d.Stratum != nil {
+		gauge := p.registry.Get("clock_drift_stratum", p.origin, "Stratum", labels)
+		gauge.Set(float64(*d.Stratum))
+	}
+
+	// Trimmed -- see helper doc above.
+	// if d.RefTimeUnixSec != nil {
+	// 	gauge := p.registry.Get("clock_drift_ref_time_unix_seconds", p.origin, "Seconds", labels)
+	// 	gauge.Set(*d.RefTimeUnixSec)
+	// }
+}
+
+func nonEmpty(v, fallback string) string {
+	if v == "" {
+		return fallback
+	}
+	return v
+}
+
+// leapStatusLabel returns the lowercased dashboard-friendly label value for
+// a chrony LeapStatus. Stable strings here matter: dashboards key off of
+// them, so we centralize the mapping rather than spreading raw enum-to-label
+// conversions across the file.
+func leapStatusLabel(s clockdrift.LeapStatus) string {
+	switch s {
+	case clockdrift.LeapNormal:
+		return "normal"
+	case clockdrift.LeapInsertSecond:
+		return "insert"
+	case clockdrift.LeapDeleteSecond:
+		return "delete"
+	case clockdrift.LeapNotSynchronised:
+		return "unsync"
+	default:
+		return "unknown"
 	}
 }

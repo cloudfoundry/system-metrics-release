@@ -6,8 +6,10 @@ import (
 	"fmt"
 	"log"
 	"syscall"
+	"time"
 
 	"code.cloudfoundry.org/system-metrics-release/src/pkg/collector"
+	"code.cloudfoundry.org/system-metrics-release/src/pkg/collector/clockdrift"
 	"github.com/shirou/gopsutil/v3/cpu"
 	"github.com/shirou/gopsutil/v3/disk"
 	"github.com/shirou/gopsutil/v3/load"
@@ -375,7 +377,115 @@ var _ = Describe("Collector", func() {
 		_, err := c.Collect()
 		Expect(err).To(HaveOccurred())
 	})
+
+	Describe("clock drift integration", func() {
+		It("does not populate ClockDrift when WithoutClockSource() is set, and reports disabled", func() {
+			c = collector.New(
+				log.New(GinkgoWriter, "", log.LstdFlags),
+				collector.WithRawCollector(src),
+				collector.WithoutClockSource(),
+			)
+
+			stats, err := c.Collect()
+			Expect(err).ToNot(HaveOccurred())
+			Expect(stats.ClockDrift).To(BeNil())
+			Expect(stats.ClockDriftEnabled).To(BeFalse())
+			Expect(stats.ClockDriftErrorsTotal).To(Equal(uint64(0)))
+		})
+
+		It("treats WithClockSource(nil) as a no-op (auto-discovery still runs)", func() {
+			// Belt-and-suspenders: pair WithClockSource(nil) with
+			// WithoutClockSource() so this test stays deterministic on
+			// Linux CI (where chronyc IS on PATH) -- without the explicit
+			// disable, auto-discovery would kick in and collect for real.
+			c = collector.New(
+				log.New(GinkgoWriter, "", log.LstdFlags),
+				collector.WithRawCollector(src),
+				collector.WithClockSource(nil),
+				collector.WithoutClockSource(),
+			)
+
+			stats, err := c.Collect()
+			Expect(err).ToNot(HaveOccurred())
+			Expect(stats.ClockDriftEnabled).To(BeFalse(),
+				"WithoutClockSource after WithClockSource(nil) should still disable")
+		})
+
+		It("populates ClockDrift from a stub TimeSource and reports enabled", func() {
+			expected := &clockdrift.TimeSyncData{
+				ReferenceID: "DEADBEEF",
+				LeapStatus:  clockdrift.LeapNormal,
+			}
+			stub := &stubTimeSource{result: expected}
+
+			c = collector.New(
+				log.New(GinkgoWriter, "", log.LstdFlags),
+				collector.WithRawCollector(src),
+				collector.WithClockSource(stub),
+			)
+
+			stats, err := c.Collect()
+			Expect(err).ToNot(HaveOccurred())
+			Expect(stats.ClockDriftEnabled).To(BeTrue())
+			Expect(stats.ClockDrift).To(Equal(expected))
+			Expect(stats.ClockDriftErrorsTotal).To(Equal(uint64(0)))
+			Expect(stub.calls).To(Equal(1))
+		})
+
+		It("nil-coalesces ClockDrift and increments the error counter on TimeSource failure", func() {
+			stub := &stubTimeSource{err: errors.New("chronyc exploded")}
+
+			c = collector.New(
+				log.New(GinkgoWriter, "", log.LstdFlags),
+				collector.WithRawCollector(src),
+				collector.WithClockSource(stub),
+			)
+
+			stats1, err := c.Collect()
+			Expect(err).ToNot(HaveOccurred(), "TimeSource errors must NOT propagate; they must surface as a counter")
+			Expect(stats1.ClockDrift).To(BeNil())
+			Expect(stats1.ClockDriftEnabled).To(BeTrue())
+			Expect(stats1.ClockDriftErrorsTotal).To(Equal(uint64(1)))
+
+			stats2, err := c.Collect()
+			Expect(err).ToNot(HaveOccurred())
+			Expect(stats2.ClockDriftErrorsTotal).To(Equal(uint64(2)),
+				"error counter must monotonically increase across cycles")
+		})
+
+		It("propagates the per-collect context to the TimeSource", func() {
+			stub := &stubTimeSource{result: &clockdrift.TimeSyncData{LeapStatus: clockdrift.LeapNormal}}
+
+			c = collector.New(
+				log.New(GinkgoWriter, "", log.LstdFlags),
+				collector.WithRawCollector(src),
+				collector.WithClockSource(stub),
+			)
+
+			_, err := c.Collect()
+			Expect(err).ToNot(HaveOccurred())
+			Expect(stub.lastCtx).NotTo(BeNil(), "TimeSource.Collect must be called with a non-nil context")
+			deadline, ok := stub.lastCtx.Deadline()
+			Expect(ok).To(BeTrue(), "context passed to TimeSource must have a deadline (otherwise wedged chronyc hangs collector)")
+			Expect(deadline).To(BeTemporally("~", time.Now().Add(5*time.Second), 5*time.Second))
+		})
+	})
 })
+
+type stubTimeSource struct {
+	result  *clockdrift.TimeSyncData
+	err     error
+	calls   int
+	lastCtx context.Context
+}
+
+func (s *stubTimeSource) Name() string { return "stub" }
+
+func (s *stubTimeSource) Collect(ctx context.Context) (*clockdrift.TimeSyncData, error) {
+	s.calls++
+	s.lastCtx = ctx
+	return s.result, s.err
+}
 
 type stubRawCollector struct {
 	timesCallCount      float64
