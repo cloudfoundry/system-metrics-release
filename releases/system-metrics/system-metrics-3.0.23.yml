@@ -1,0 +1,50 @@
+name: system-metrics
+version: 3.0.23
+commit_hash: 3e879fb6
+uncommitted_changes: false
+jobs:
+- name: loggr-system-metrics-agent
+  version: 25c9dd448322de48eccac8c55d6c77652732f96507c93dfbf5aeff8e8147332b
+  fingerprint: 25c9dd448322de48eccac8c55d6c77652732f96507c93dfbf5aeff8e8147332b
+  sha1: sha256:36178f2078e0fe1dec462e1cc074b31911ad40d89b7ac465e398e62066970622
+  packages:
+  - system-metrics-agent
+- name: loggr-system-metrics-agent-windows
+  version: d442a66c8d88617113163fc2619f5f10bbaf4c1dfac254b9e5f9f3901392e4bb
+  fingerprint: d442a66c8d88617113163fc2619f5f10bbaf4c1dfac254b9e5f9f3901392e4bb
+  sha1: sha256:c510542458a87c8a2c27ceba17ed912d4a1ca90b64e015c002b5745e937e4c89
+  packages:
+  - system-metrics-agent-windows
+packages:
+- name: golang-1.26-darwin
+  version: 4b02bd1c105f020386fd1579e30fde52cda48e83670c348e8b89efab218f51af
+  fingerprint: 4b02bd1c105f020386fd1579e30fde52cda48e83670c348e8b89efab218f51af
+  sha1: sha256:864b733107fb8ab531426932bd1fee750fd846500b78a476d548bf2099a318aa
+  dependencies: []
+- name: golang-1.26-linux
+  version: 13cae133eddfb84c2b42976ae01abbac89ab1f092697457046e596037adc6ff5
+  fingerprint: 13cae133eddfb84c2b42976ae01abbac89ab1f092697457046e596037adc6ff5
+  sha1: sha256:78477e64964ecad25dd76a7cc0bc04310f6a12c403b782c9ad62caf9fd73633a
+  dependencies: []
+- name: golang-1.26-windows
+  version: d2cb1cee3e016c3715519c1c07b97f0d4a3057e858211ec0d366b09dfa54acb1
+  fingerprint: d2cb1cee3e016c3715519c1c07b97f0d4a3057e858211ec0d366b09dfa54acb1
+  sha1: sha256:12470f17aa3fe682122242ad4ff958b04b99e706cb8bb19b6644e3104f9d4423
+  dependencies: []
+- name: system-metrics-agent
+  version: 43339e730769e5620992ec16c2d294420c5278391242e41e70dc269b181a2311
+  fingerprint: 43339e730769e5620992ec16c2d294420c5278391242e41e70dc269b181a2311
+  sha1: sha256:714e5c52ade45254c6cdeb19748bf1b6cb46bfa5eda525ef177b0fd0a72ce036
+  dependencies:
+  - golang-1.26-linux
+- name: system-metrics-agent-windows
+  version: cd85b9be7237d81ddd6a0b7fad160f240723f2013d7ce7de860661cc37f8faaa
+  fingerprint: cd85b9be7237d81ddd6a0b7fad160f240723f2013d7ce7de860661cc37f8faaa
+  sha1: sha256:2728588710386697dd2a8a1775977c87aeeb172726ea7b3b005ffff90fd0ff26
+  dependencies:
+  - golang-1.26-windows
+license:
+  version: b3d3a6be0a737881904a718497cb593042aa0ec56ad91b93934e395a2f9c1a3d
+  fingerprint: b3d3a6be0a737881904a718497cb593042aa0ec56ad91b93934e395a2f9c1a3d
+  sha1: sha256:2117397f6c28f12b6527c3b4f156a76f1829ffb74eae88e2639fb12ae8c9323e
+no_compression: false
