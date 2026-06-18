@@ -16,6 +16,10 @@ func main() {
 
 	cfg := app.LoadConfig()
 
-	c := collector.New(log)
+	var collectorOpts []collector.CollectorOption
+	if !cfg.ClockDriftEnabled {
+		collectorOpts = append(collectorOpts, collector.WithoutClockSource())
+	}
+	c := collector.New(log, collectorOpts...)
 	app.NewSystemMetricsAgent(c.Collect, cfg, log).Run()
 }
