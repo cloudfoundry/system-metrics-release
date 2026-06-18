@@ -138,10 +138,12 @@ func TestParseReferenceID(t *testing.T) {
 		wantID   string
 		wantHost string
 	}{
-		{"id and host", "49B9B6D1 (73.185.182.209)", "49B9B6D1", "73.185.182.209"},
-		{"id only no parens", "7F7F0101", "7F7F0101", ""},
-		{"id with empty parens", "00000000 ()", "00000000", ""},
-		{"hostname inside parens", "ABCDEF01 (time.example.com)", "ABCDEF01", "time.example.com"},
+		{"id and host", "49B9B6D1 (73.185.182.209)", "73.185.182.209", "73.185.182.209"},
+		{"id only no parens", "7F7F0101", "127.127.1.1", ""},
+		{"id with empty parens", "00000000 ()", "0.0.0.0", ""},
+		{"hostname inside parens", "ABCDEF01 (time.example.com)", "171.205.239.1", "time.example.com"},
+		{"stratum 1 GPS ASCII", "47505300 (GPS)", "GPS", "GPS"},
+		{"stratum 1 LOCL ASCII", "4c4f434c (LOCL)", "LOCL", "LOCL"},
 	}
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
@@ -174,8 +176,8 @@ Leap status     : Normal`
 		t.Fatalf("unexpected error: %v", err)
 	}
 
-	if data.ReferenceID != "49B9B6D1" {
-		t.Errorf("ReferenceID: got %q, want %q", data.ReferenceID, "49B9B6D1")
+	if data.ReferenceID != "73.185.182.209" {
+		t.Errorf("ReferenceID: got %q, want %q", data.ReferenceID, "73.185.182.209")
 	}
 	if data.ReferenceHost != "73.185.182.209" {
 		t.Errorf("ReferenceHost: got %q, want %q", data.ReferenceHost, "73.185.182.209")
@@ -310,8 +312,8 @@ Leap status     : Normal`
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
-	if data.ReferenceID != "49B9B6D1" {
-		t.Errorf("ReferenceID: got %q, want %q", data.ReferenceID, "49B9B6D1")
+	if data.ReferenceID != "73.185.182.209" {
+		t.Errorf("ReferenceID: got %q, want %q", data.ReferenceID, "73.185.182.209")
 	}
 	if b.Name() != BackendChrony {
 		t.Errorf("Name() = %q, want %q", b.Name(), BackendChrony)
