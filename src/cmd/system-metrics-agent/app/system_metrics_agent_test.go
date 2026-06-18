@@ -164,6 +164,110 @@ var _ = Describe("SystemMetricsAgent", func() {
 		Expect(strings.Count(string(body), "\n")).To(Equal(51))
 	})
 
+	It("omits clock_drift metrics when ClockDriftEnabled is false", func() {
+		// Mirrors what collector.New does when CLOCK_DRIFT_ENABLED=false:
+		// WithoutClockSource() causes ClockDriftEnabled to be false in every
+		// SystemStat, so the Prometheus sender emits no clock_drift_* series.
+		disabledStat := defaultStat
+		disabledStat.ClockDriftEnabled = false
+
+		agent = app.NewSystemMetricsAgent(
+			func() (collector.SystemStat, error) { return disabledStat, nil },
+			app.Config{
+				SampleInterval: time.Millisecond,
+				Deployment:     "some-deployment",
+				Job:            "some-job",
+				Index:          "some-index",
+				IP:             "some-ip",
+				CACertPath:     testCerts.CA(),
+				CertPath:       testCerts.Cert("system-metrics-agent"),
+				KeyPath:        testCerts.Key("system-metrics-agent"),
+			},
+			log.New(GinkgoWriter, "", log.LstdFlags),
+		)
+		go agent.Run()
+		defer agent.Shutdown(context.Background())
+
+		var addr string
+		Eventually(func() int {
+			addr = agent.MetricsAddr()
+			return len(addr)
+		}).ShouldNot(Equal(0))
+
+		client := newTLSClient(
+			testCerts.Cert("system-metrics-agent"),
+			testCerts.Key("system-metrics-agent"),
+			testCerts.CA(),
+			"system-metrics-agent",
+		)
+
+		Eventually(func() string {
+			resp, err := client.Get("https://" + addr + "/metrics")
+			if err != nil {
+				return ""
+			}
+			defer resp.Body.Close() //nolint:errcheck
+			body, _ := io.ReadAll(resp.Body)
+			return string(body)
+		}).ShouldNot(BeEmpty())
+
+		resp, err := client.Get("https://" + addr + "/metrics")
+		Expect(err).ToNot(HaveOccurred())
+		body, err := io.ReadAll(resp.Body)
+		Expect(err).ToNot(HaveOccurred())
+		Expect(string(body)).NotTo(ContainSubstring("clock_drift_"))
+	})
+
+	It("emits clock_drift_collection_errors when ClockDriftEnabled is true", func() {
+		// Mirrors what collector.New does when CLOCK_DRIFT_ENABLED=true:
+		// the clock drift source is active, so even when chronyc fails and
+		// ClockDrift is nil, the collection-errors counter is always emitted.
+		enabledStat := defaultStat
+		enabledStat.ClockDriftEnabled = true
+		enabledStat.ClockDrift = nil       // no successful collection yet
+		enabledStat.ClockDriftErrorsTotal = 0
+
+		agent = app.NewSystemMetricsAgent(
+			func() (collector.SystemStat, error) { return enabledStat, nil },
+			app.Config{
+				SampleInterval: time.Millisecond,
+				Deployment:     "some-deployment",
+				Job:            "some-job",
+				Index:          "some-index",
+				IP:             "some-ip",
+				CACertPath:     testCerts.CA(),
+				CertPath:       testCerts.Cert("system-metrics-agent"),
+				KeyPath:        testCerts.Key("system-metrics-agent"),
+			},
+			log.New(GinkgoWriter, "", log.LstdFlags),
+		)
+		go agent.Run()
+		defer agent.Shutdown(context.Background())
+
+		var addr string
+		Eventually(func() int {
+			addr = agent.MetricsAddr()
+			return len(addr)
+		}).ShouldNot(Equal(0))
+
+		client := newTLSClient(
+			testCerts.Cert("system-metrics-agent"),
+			testCerts.Key("system-metrics-agent"),
+			testCerts.CA(),
+			"system-metrics-agent",
+		)
+
+		Eventually(func() string {
+			resp, err := client.Get("https://" + addr + "/metrics")
+			if err != nil {
+				return ""
+			}
+			defer resp.Body.Close() //nolint:errcheck
+			body, _ := io.ReadAll(resp.Body)
+			return string(body)
+		}).Should(ContainSubstring("clock_drift_collection_errors"))
+	})
+
 	It("contains default prom labels", func() {
 		go agent.Run()
 		defer agent.Shutdown(context.Background())

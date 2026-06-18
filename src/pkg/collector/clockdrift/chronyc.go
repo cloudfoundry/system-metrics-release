@@ -48,10 +48,12 @@ var requiredKeys = []string{keyReferenceID, keyStratum, keyLeapStatus}
 // any of them lets us fail fast with a useful diagnostic.
 var chronyErrorPrefixes = []string{"506 ", "501 ", "Error :", "Could not"}
 
-// DefaultCacheTTL is how long ChronyBackend reuses the most recent successful
-// snapshot before invoking chronyc again. Compliance dashboards stay fresh
-// while we avoid forking once per system-metrics tick (typically 15s).
-const DefaultCacheTTL = 0 //5 * time.Minute
+// DefaultCacheTTL controls result reuse between collection ticks. Zero
+// disables caching: chronyc is invoked on every tick (typically every 15s),
+// keeping clock drift metrics at the same cadence as all other system metrics
+// and ensuring a lost-sync event surfaces within one tick rather than up to
+// five minutes later.
+const DefaultCacheTTL = 0
 
 // ChronyBackend implements TimeSource by executing `chronyc tracking`.
 //
