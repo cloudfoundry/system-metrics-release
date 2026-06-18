@@ -2,6 +2,7 @@ package clockdrift
 
 import (
 	"context"
+	"encoding/hex"
 	"errors"
 	"fmt"
 	"io"
@@ -321,18 +322,67 @@ func missingRequiredKeys(raw map[string]string) []string {
 }
 
 // parseReferenceID splits a chronyc reference value of the form
-// `<hex-id> (<host>)` into (id, host). When the host segment is missing or
-// empty the host return is empty and parentheses never leak into label
-// values.
+// `<hex-id> (<host>)` into (id, host), decoding the hexadecimal <hex-id> into
+// an IP address or an ASCII string if it is a stratum 1 source. When the host
+// segment is missing or empty the host return is empty and parentheses never
+// leak into label values.
 func parseReferenceID(v string) (string, string) {
 	v = strings.TrimSpace(v)
 	if m := refIDPattern.FindStringSubmatch(v); m != nil {
-		return m[1], strings.TrimSpace(m[2])
+		return decodeReferenceID(m[1]), strings.TrimSpace(m[2])
 	}
 	// Strip any stray parens (e.g., `7F7F0101 ()` when chrony has no peer)
 	// rather than letting them propagate into Prometheus label values.
 	v = strings.TrimRight(strings.TrimSpace(strings.TrimSuffix(v, "()")), " ")
-	return v, ""
+	return decodeReferenceID(v), ""
+}
+
+// decodeReferenceID converts a 32-bit hexadecimal reference ID string
+// to either a human-readable ASCII string (if it's a stratum 1 reference
+// clock like GPS/PPS) or an IPv4 address. If the input is not a valid
+// 8-character hex string, it is returned unmodified.
+func decodeReferenceID(hexStr string) string {
+	hexStr = strings.TrimSpace(hexStr)
+	if len(hexStr) != 8 {
+		return hexStr
+	}
+	bytes, err := hex.DecodeString(hexStr)
+	if err != nil {
+		return hexStr
+	}
+
+	// Check if all bytes are printable ASCII or trailing null padding.
+	// This helps identify Stratum 1 reference clocks (e.g., GPS, PPS, ACTS, LOCL).
+	isASCII := true
+	for i, b := range bytes {
+		if b == 0 {
+			// Zero padding must extend to the end of the 4-byte block
+			for j := i; j < len(bytes); j++ {
+				if bytes[j] != 0 {
+					isASCII = false
+					break
+				}
+			}
+			break
+		}
+		// Printable ASCII characters are 32 (' ') through 126 ('~')
+		if b < 32 || b > 126 {
+			isASCII = false
+			break
+		}
+	}
+
+	if isASCII {
+		s := string(bytes)
+		s = strings.TrimRight(s, "\x00")
+		s = strings.TrimSpace(s)
+		if len(s) > 0 {
+			return s
+		}
+	}
+
+	// Otherwise, format as an IPv4 address
+	return fmt.Sprintf("%d.%d.%d.%d", bytes[0], bytes[1], bytes[2], bytes[3])
 }
 
 func firstLine(s string) string {
