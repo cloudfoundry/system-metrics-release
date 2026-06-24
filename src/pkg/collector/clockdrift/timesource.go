@@ -114,17 +114,11 @@ type TimeSyncData struct {
 	ReferenceHost       string        `json:"reference_host"`
 	Stratum             *int          `json:"stratum,omitempty"`
 	RefTimeUTC          string        `json:"ref_time_utc"`
-	RefTimeUnixSec      *float64      `json:"ref_time_unix_sec,omitempty"`
 	SystemTimeOffsetSec float64       `json:"system_time_offset_sec"`
 	SystemTimeDirection TimeDirection `json:"system_time_direction"`
 	LastOffsetSec       float64       `json:"last_offset_sec"`
-	RMSOffsetSec        float64       `json:"rms_offset_sec"`
 	FrequencyPPM        float64       `json:"frequency_ppm"`
 	FrequencyDirection  TimeDirection `json:"frequency_direction"`
-	ResidualFreqPPM     float64       `json:"residual_freq_ppm"`
-	SkewPPM             float64       `json:"skew_ppm"`
 	RootDelaySec        float64       `json:"root_delay_sec"`
-	RootDispersionSec   float64       `json:"root_dispersion_sec"`
-	UpdateIntervalSec   float64       `json:"update_interval_sec"`
 	LeapStatus          LeapStatus    `json:"leap_status"`
 }

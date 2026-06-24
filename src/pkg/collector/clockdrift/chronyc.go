@@ -26,13 +26,8 @@ const (
 	keyRefTimeUTC     = "Ref time (UTC)"
 	keySystemTime     = "System time"
 	keyLastOffset     = "Last offset"
-	keyRMSOffset      = "RMS offset"
 	keyFrequency      = "Frequency"
-	keyResidualFreq   = "Residual freq"
-	keySkew           = "Skew"
 	keyRootDelay      = "Root delay"
-	keyRootDispersion = "Root dispersion"
-	keyUpdateInterval = "Update interval"
 	keyLeapStatus     = "Leap status"
 )
 
@@ -251,13 +246,8 @@ func parseChronyToTimeSyncData(output string, logger *log.Logger) (*TimeSyncData
 	data := &TimeSyncData{
 		SystemTimeOffsetSec: math.NaN(),
 		LastOffsetSec:       math.NaN(),
-		RMSOffsetSec:        math.NaN(),
 		FrequencyPPM:        math.NaN(),
-		ResidualFreqPPM:     math.NaN(),
-		SkewPPM:             math.NaN(),
 		RootDelaySec:        math.NaN(),
-		RootDispersionSec:   math.NaN(),
-		UpdateIntervalSec:   math.NaN(),
 		SystemTimeDirection: DirectionUnknown,
 		FrequencyDirection:  DirectionUnknown,
 	}
@@ -275,23 +265,13 @@ func parseChronyToTimeSyncData(output string, logger *log.Logger) (*TimeSyncData
 	}
 
 	data.RefTimeUTC = raw[keyRefTimeUTC]
-	if ts, ok := parseRefTime(data.RefTimeUTC); ok {
-		data.RefTimeUnixSec = &ts
-	} else if data.RefTimeUTC != "" {
-		logger.Printf("clockdrift: parse RefTimeUTC %q failed", data.RefTimeUTC)
-	}
 
 	data.LeapStatus = ParseLeapStatus(raw[keyLeapStatus])
 
 	data.SystemTimeOffsetSec, data.SystemTimeDirection = parseOffsetWithDirection(raw[keySystemTime], logger, keySystemTime)
 	data.LastOffsetSec = parseSeconds(raw[keyLastOffset], logger, keyLastOffset)
-	data.RMSOffsetSec = parseSeconds(raw[keyRMSOffset], logger, keyRMSOffset)
 	data.FrequencyPPM, data.FrequencyDirection = parsePPMWithDirection(raw[keyFrequency], logger, keyFrequency)
-	data.ResidualFreqPPM = parsePPM(raw[keyResidualFreq], logger, keyResidualFreq)
-	data.SkewPPM = parsePPM(raw[keySkew], logger, keySkew)
 	data.RootDelaySec = parseSeconds(raw[keyRootDelay], logger, keyRootDelay)
-	data.RootDispersionSec = parseSeconds(raw[keyRootDispersion], logger, keyRootDispersion)
-	data.UpdateIntervalSec = parseSeconds(raw[keyUpdateInterval], logger, keyUpdateInterval)
 
 	return data, nil
 }
@@ -445,40 +425,4 @@ func parsePPMWithDirection(s string, logger *log.Logger, fieldName string) (floa
 		v = -v
 	}
 	return v, dir
-}
-
-func parsePPM(s string, logger *log.Logger, fieldName string) float64 {
-	fields := strings.Fields(s)
-	if len(fields) == 0 {
-		return math.NaN()
-	}
-	v, err := strconv.ParseFloat(fields[0], 64)
-	if err != nil {
-		logger.Printf("clockdrift: parse %s %q: %v", fieldName, s, err)
-		return math.NaN()
-	}
-	return v
-}
-
-// parseRefTime converts chronyc's "Ref time (UTC)" value to a Unix epoch
-// timestamp. The layout uses `_2` (space-padded day) so values like
-// "Tue Dec  2 21:14:33 2025" parse correctly. The bool return distinguishes
-// "successfully parsed" from "missing or unparseable" so the caller can
-// represent the latter as a nil pointer rather than the misleading 1970
-// epoch.
-func parseRefTime(s string) (float64, bool) {
-	s = strings.TrimSpace(s)
-	if s == "" {
-		return 0, false
-	}
-	layouts := []string{
-		"Mon Jan _2 15:04:05 2006",
-		"Mon Jan 02 15:04:05 2006",
-	}
-	for _, layout := range layouts {
-		if t, err := time.ParseInLocation(layout, s, time.UTC); err == nil {
-			return float64(t.Unix()), true
-		}
-	}
-	return 0, false
 }

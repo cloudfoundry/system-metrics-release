@@ -350,12 +350,7 @@ func (p PromSender) setClockDriftLeapStatus(d *clockdrift.TimeSyncData) {
 // setClockDriftNumericGauges emits the lean PCI-DSS-plus-operations set:
 // system_time_offset_seconds and last_offset_seconds for compliance evidence,
 // frequency_ppm and root_delay_seconds for IaaS/network diagnostics, and
-// stratum as the at-a-glance health indicator. The chrony-internal smoothing
-// and error-bound metrics (rms_offset, residual_freq_ppm, skew_ppm,
-// root_dispersion, update_interval, ref_time_unix) are deliberately
-// commented out: they have no operational or audit value at the foundation
-// scope, and uncommenting any line below is sufficient to bring them back.
-// The clockdrift parser still populates every TimeSyncData field unchanged.
+// stratum as the at-a-glance health indicator.
 func (p PromSender) setClockDriftNumericGauges(d *clockdrift.TimeSyncData) {
 	labels := p.labels
 
@@ -372,23 +367,10 @@ func (p PromSender) setClockDriftNumericGauges(d *clockdrift.TimeSyncData) {
 	setIfFinite("clock_drift_frequency_ppm", "ppm", d.FrequencyPPM)
 	setIfFinite("clock_drift_root_delay_seconds", "Seconds", d.RootDelaySec)
 
-	// Trimmed -- see helper doc above.
-	// setIfFinite("clock_drift_rms_offset_seconds", "Seconds", d.RMSOffsetSec)
-	// setIfFinite("clock_drift_residual_freq_ppm", "ppm", d.ResidualFreqPPM)
-	// setIfFinite("clock_drift_skew_ppm", "ppm", d.SkewPPM)
-	// setIfFinite("clock_drift_root_dispersion_seconds", "Seconds", d.RootDispersionSec)
-	// setIfFinite("clock_drift_update_interval_seconds", "Seconds", d.UpdateIntervalSec)
-
 	if d.Stratum != nil {
 		gauge := p.registry.Get("clock_drift_stratum", p.origin, "Stratum", labels)
 		gauge.Set(float64(*d.Stratum))
 	}
-
-	// Trimmed -- see helper doc above.
-	// if d.RefTimeUnixSec != nil {
-	// 	gauge := p.registry.Get("clock_drift_ref_time_unix_seconds", p.origin, "Seconds", labels)
-	// 	gauge.Set(*d.RefTimeUnixSec)
-	// }
 }
 
 func nonEmpty(v, fallback string) string {

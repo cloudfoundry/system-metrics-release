@@ -271,7 +271,6 @@ var _ = Describe("Prometheus Sender", func() {
 	Describe("clock drift metrics", func() {
 		var (
 			stratum4   = 4
-			refTimeSec = 12345.0
 			fullInput  collector.SystemStat
 		)
 
@@ -282,16 +281,11 @@ var _ = Describe("Prometheus Sender", func() {
 					ReferenceID:         "REF1",
 					ReferenceHost:       "1.2.3.4",
 					Stratum:             &stratum4,
-					RefTimeUnixSec:      &refTimeSec,
+					RefTimeUTC:          "Tue Dec  2 21:14:33 2025",
 					SystemTimeOffsetSec: -0.123,
 					LastOffsetSec:       -0.000364,
-					RMSOffsetSec:        0.000758,
 					FrequencyPPM:        10.5,
-					ResidualFreqPPM:     -0.003,
-					SkewPPM:             0.146,
 					RootDelaySec:        0.070813,
-					RootDispersionSec:   0.011881,
-					UpdateIntervalSec:   2073.3,
 					LeapStatus:          clockdrift.LeapNormal,
 				},
 			}
@@ -312,33 +306,7 @@ var _ = Describe("Prometheus Sender", func() {
 			Entry("frequency_ppm", "clock_drift_frequency_ppm", "ppm", 10.5),
 			Entry("root_delay_seconds", "clock_drift_root_delay_seconds", "Seconds", 0.070813),
 			Entry("stratum", "clock_drift_stratum", "Stratum", 4.0),
-			// Trimmed -- chrony-internal smoothing/error-bound metrics with
-			// no operational or audit value. Uncomment to bring back; the
-			// parser still populates these fields on TimeSyncData.
-			// Entry("rms_offset_seconds", "clock_drift_rms_offset_seconds", "Seconds", 0.000758),
-			// Entry("residual_freq_ppm", "clock_drift_residual_freq_ppm", "ppm", -0.003),
-			// Entry("skew_ppm", "clock_drift_skew_ppm", "ppm", 0.146),
-			// Entry("root_dispersion_seconds", "clock_drift_root_dispersion_seconds", "Seconds", 0.011881),
-			// Entry("update_interval_seconds", "clock_drift_update_interval_seconds", "Seconds", 2073.3),
-			// Entry("ref_time_unix_seconds", "clock_drift_ref_time_unix_seconds", "Seconds", 12345.0),
 		)
-
-		It("does NOT emit the trimmed chrony-internal smoothing metrics", func() {
-			sender.Send(fullInput)
-
-			trimmed := []string{
-				"clock_drift_rms_offset_seconds",
-				"clock_drift_residual_freq_ppm",
-				"clock_drift_skew_ppm",
-				"clock_drift_root_dispersion_seconds",
-				"clock_drift_update_interval_seconds",
-				"clock_drift_ref_time_unix_seconds",
-			}
-			for _, name := range trimmed {
-				Expect(registry.findByName(name)).To(BeNil(),
-					"%s should not be emitted (trimmed from lean PCI set)", name)
-			}
-		})
 
 		It("emits a single reference_info gauge with reference labels", func() {
 			sender.Send(fullInput)
@@ -420,13 +388,8 @@ var _ = Describe("Prometheus Sender", func() {
 					ReferenceHost:       "1.2.3.4",
 					SystemTimeOffsetSec: math.NaN(),
 					LastOffsetSec:       math.NaN(),
-					RMSOffsetSec:        math.NaN(),
 					FrequencyPPM:        math.NaN(),
-					ResidualFreqPPM:     math.NaN(),
-					SkewPPM:             math.NaN(),
 					RootDelaySec:        math.NaN(),
-					RootDispersionSec:   math.NaN(),
-					UpdateIntervalSec:   math.NaN(),
 					LeapStatus:          clockdrift.LeapNormal,
 				},
 			}

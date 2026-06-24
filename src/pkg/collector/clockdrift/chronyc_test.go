@@ -80,31 +80,6 @@ func TestParsePPMWithDirection(t *testing.T) {
 	}
 }
 
-func TestParseRefTime(t *testing.T) {
-	tests := []struct {
-		name    string
-		input   string
-		wantTS  float64
-		wantOK  bool
-	}{
-		{"zero-padded day", "Tue Dec 02 21:14:33 2025", 1764710073, true},
-		{"space-padded single-digit day", "Tue Dec  2 21:14:33 2025", 1764710073, true},
-		{"empty string", "", 0, false},
-		{"junk", "not-a-date", 0, false},
-	}
-	for _, tc := range tests {
-		t.Run(tc.name, func(t *testing.T) {
-			gotTS, gotOK := parseRefTime(tc.input)
-			if gotOK != tc.wantOK {
-				t.Fatalf("parseRefTime(%q) ok = %v, want %v", tc.input, gotOK, tc.wantOK)
-			}
-			if gotOK && gotTS != tc.wantTS {
-				t.Errorf("parseRefTime(%q) = %v, want %v", tc.input, gotTS, tc.wantTS)
-			}
-		})
-	}
-}
-
 func TestParseLeapStatus(t *testing.T) {
 	tests := []struct {
 		name  string
@@ -191,12 +166,6 @@ Leap status     : Normal`
 	if data.FrequencyPPM != -10.246 {
 		t.Errorf("FrequencyPPM: got %v, want %v", data.FrequencyPPM, -10.246)
 	}
-	if data.UpdateIntervalSec != 2073.3 {
-		t.Errorf("UpdateIntervalSec: got %v, want %v", data.UpdateIntervalSec, 2073.3)
-	}
-	if data.RefTimeUnixSec == nil || *data.RefTimeUnixSec != 1764710073 {
-		t.Errorf("RefTimeUnixSec: got %v, want pointer to 1764710073", data.RefTimeUnixSec)
-	}
 	if data.LeapStatus != LeapNormal {
 		t.Errorf("LeapStatus: got %q, want %q", data.LeapStatus, LeapNormal)
 	}
@@ -245,9 +214,6 @@ Leap status     : Normal`
 	if data.Stratum != nil {
 		t.Errorf("Stratum: got %v, want nil for unparseable input", data.Stratum)
 	}
-	if data.RefTimeUnixSec != nil {
-		t.Errorf("RefTimeUnixSec: got %v, want nil for unparseable input", data.RefTimeUnixSec)
-	}
 	if !math.IsNaN(data.SystemTimeOffsetSec) {
 		t.Errorf("SystemTimeOffsetSec: got %v, want NaN", data.SystemTimeOffsetSec)
 	}
@@ -267,11 +233,8 @@ func TestParseChronyToTimeSyncData_CRLFAndPaddedDay(t *testing.T) {
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
-	if data.RefTimeUnixSec == nil {
-		t.Fatal("RefTimeUnixSec was nil; expected space-padded-day parse to succeed")
-	}
-	if *data.RefTimeUnixSec != 1764710073 {
-		t.Errorf("RefTimeUnixSec: got %v, want 1764710073", *data.RefTimeUnixSec)
+	if data.RefTimeUTC != "Tue Dec  2 21:14:33 2025" {
+		t.Errorf("RefTimeUTC: got %v, want Tue Dec  2 21:14:33 2025", data.RefTimeUTC)
 	}
 }
 
