@@ -60,10 +60,6 @@ const DefaultCacheTTL = 0
 //     out from under the parser.
 //   - Successful results are cached for cacheTTL to avoid forking chronyc
 //     more often than the audit cadence demands.
-//
-// Linux is the only currently-supported platform. Azure Linux VMs use chrony
-// with a PTP reference clock (/dev/ptp_hyperv) and produce identical
-// `chronyc tracking` output, so no Azure-specific code is required.
 type ChronyBackend struct {
 	runner   func(ctx context.Context) (string, error)
 	logger   *log.Logger
