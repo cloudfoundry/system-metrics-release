@@ -39,6 +39,51 @@ describe 'loggr-system-metrics-agent' do
     it 'passes the sample interval from properties' do
       expect(process['env']['SAMPLE_INTERVAL']).to eq('15s')
     end
+
+    it 'defaults CLOCK_DRIFT_ENABLED to false' do
+      expect(process['env']['CLOCK_DRIFT_ENABLED']).to eq('false')
+    end
+
+    context 'when clock_drift_enabled is true' do
+      let(:rendered) { template.render({'clock_drift_enabled' => true}) }
+
+      it 'passes CLOCK_DRIFT_ENABLED as true' do
+        expect(process['env']['CLOCK_DRIFT_ENABLED']).to eq('true')
+      end
+    end
+
+    context 'when clock_drift_enabled is false' do
+      let(:rendered) { template.render({'clock_drift_enabled' => false}) }
+
+      it 'passes CLOCK_DRIFT_ENABLED as false' do
+        expect(process['env']['CLOCK_DRIFT_ENABLED']).to eq('false')
+      end
+    end
+  end
+
+  describe 'bin/ctl' do
+    let(:template) { job.template('bin/ctl') }
+
+    it 'defaults CLOCK_DRIFT_ENABLED to false' do
+      rendered = template.render({})
+      expect(rendered).to include('CLOCK_DRIFT_ENABLED=false')
+    end
+
+    context 'when clock_drift_enabled is true' do
+      let(:rendered) { template.render({'clock_drift_enabled' => true}) }
+
+      it 'passes CLOCK_DRIFT_ENABLED=true as an environment variable' do
+        expect(rendered).to include('CLOCK_DRIFT_ENABLED=true')
+      end
+    end
+
+    context 'when clock_drift_enabled is false' do
+      let(:rendered) { template.render({'clock_drift_enabled' => false}) }
+
+      it 'passes CLOCK_DRIFT_ENABLED=false as an environment variable' do
+        expect(rendered).to include('CLOCK_DRIFT_ENABLED=false')
+      end
+    end
   end
 
   describe 'monit' do
