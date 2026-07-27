@@ -301,11 +301,11 @@ var _ = Describe("Prometheus Sender", func() {
 			Expect(gauge.tags).NotTo(HaveKey("reference_host"), "numeric gauges must NOT carry reference_host (cardinality)")
 			Expect(gauge.tags["origin"]).To(Equal("test-origin"))
 		},
-			Entry("system_time_offset_seconds", "clock_drift_system_time_offset_seconds", "Seconds", -0.123),
-			Entry("last_offset_seconds", "clock_drift_last_offset_seconds", "Seconds", -0.000364),
+			Entry("system_time_offset_seconds", "clock_drift_system_time_offset_seconds", "seconds", -0.123),
+			Entry("last_offset_seconds", "clock_drift_last_offset_seconds", "seconds", -0.000364),
 			Entry("frequency_ppm", "clock_drift_frequency_ppm", "ppm", 10.5),
-			Entry("root_delay_seconds", "clock_drift_root_delay_seconds", "Seconds", 0.070813),
-			Entry("stratum", "clock_drift_stratum", "Stratum", 4.0),
+			Entry("root_delay_seconds", "clock_drift_root_delay_seconds", "seconds", 0.070813),
+			Entry("stratum", "clock_drift_stratum", "stratum", 4.0),
 		)
 
 		It("emits a single reference_info gauge with reference labels", func() {
