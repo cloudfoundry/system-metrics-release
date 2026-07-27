@@ -362,13 +362,13 @@ func (p PromSender) setClockDriftNumericGauges(d *clockdrift.TimeSyncData) {
 		gauge.Set(value)
 	}
 
-	setIfFinite("clock_drift_system_time_offset_seconds", "Seconds", d.SystemTimeOffsetSec)
-	setIfFinite("clock_drift_last_offset_seconds", "Seconds", d.LastOffsetSec)
+	setIfFinite("clock_drift_system_time_offset_seconds", "seconds", d.SystemTimeOffsetSec)
+	setIfFinite("clock_drift_last_offset_seconds", "seconds", d.LastOffsetSec)
 	setIfFinite("clock_drift_frequency_ppm", "ppm", d.FrequencyPPM)
-	setIfFinite("clock_drift_root_delay_seconds", "Seconds", d.RootDelaySec)
+	setIfFinite("clock_drift_root_delay_seconds", "seconds", d.RootDelaySec)
 
 	if d.Stratum != nil {
-		gauge := p.registry.Get("clock_drift_stratum", p.origin, "Stratum", labels)
+		gauge := p.registry.Get("clock_drift_stratum", p.origin, "stratum", labels)
 		gauge.Set(float64(*d.Stratum))
 	}
 }
