@@ -59,11 +59,11 @@ var _ = Describe("Prometheus Sender", func() {
 	It("gets the correct number of metrics from the registry", func() {
 		sender.Send(defaultInput)
 
-		// 50 = system stats + disk + network proto counters + health.
+		// 56 = system stats + disk + network proto counters + health.
 		// Clock drift metrics are not counted here because defaultInput
 		// has ClockDriftEnabled=false (the zero value), which short-circuits
 		// the entire setClockDriftGauges path before any gauge is created.
-		Expect(registry.gaugeCount).To(Equal(50))
+		Expect(registry.gaugeCount).To(Equal(56))
 	})
 
 	It("does not panic with no default labels", func() {
@@ -128,6 +128,8 @@ var _ = Describe("Prometheus Sender", func() {
 		Entry("system_disk_system_inode_percent", "system_disk_system_inode_percent", map[string]string{"origin": "test-origin"}, "Percent", 45.0),
 		Entry("system_disk_system_read_bytes", "system_disk_system_read_bytes", map[string]string{"origin": "test-origin"}, "Bytes", 10.0),
 		Entry("system_disk_system_write_bytes", "system_disk_system_write_bytes", map[string]string{"origin": "test-origin"}, "Bytes", 20.0),
+		Entry("system_disk_system_read_count", "system_disk_system_read_count", map[string]string{"origin": "test-origin"}, "count", 1.0),
+		Entry("system_disk_system_write_count", "system_disk_system_write_count", map[string]string{"origin": "test-origin"}, "count", 2.0),
 		Entry("system_disk_system_read_time", "system_disk_system_read_time", map[string]string{"origin": "test-origin"}, "ms", 30.0),
 		Entry("system_disk_system_write_time", "system_disk_system_write_time", map[string]string{"origin": "test-origin"}, "ms", 40.0),
 		Entry("system_disk_system_io_time", "system_disk_system_io_time", map[string]string{"origin": "test-origin"}, "ms", 50.0),
@@ -135,6 +137,8 @@ var _ = Describe("Prometheus Sender", func() {
 		Entry("system_disk_ephemeral_inode_percent", "system_disk_ephemeral_inode_percent", map[string]string{"origin": "test-origin"}, "Percent", 65.0),
 		Entry("system_disk_ephemeral_read_bytes", "system_disk_ephemeral_read_bytes", map[string]string{"origin": "test-origin"}, "Bytes", 100.0),
 		Entry("system_disk_ephemeral_write_bytes", "system_disk_ephemeral_write_bytes", map[string]string{"origin": "test-origin"}, "Bytes", 200.0),
+		Entry("system_disk_ephemeral_read_count", "system_disk_ephemeral_read_count", map[string]string{"origin": "test-origin"}, "count", 11.0),
+		Entry("system_disk_ephemeral_write_count", "system_disk_ephemeral_write_count", map[string]string{"origin": "test-origin"}, "count", 21.0),
 		Entry("system_disk_ephemeral_read_time", "system_disk_ephemeral_read_time", map[string]string{"origin": "test-origin"}, "ms", 300.0),
 		Entry("system_disk_ephemeral_write_time", "system_disk_ephemeral_write_time", map[string]string{"origin": "test-origin"}, "ms", 400.0),
 		Entry("system_disk_ephemeral_io_time", "system_disk_ephemeral_io_time", map[string]string{"origin": "test-origin"}, "ms", 500.0),
@@ -142,6 +146,8 @@ var _ = Describe("Prometheus Sender", func() {
 		Entry("system_disk_persistent_inode_percent", "system_disk_persistent_inode_percent", map[string]string{"origin": "test-origin"}, "Percent", 85.0),
 		Entry("system_disk_persistent_read_bytes", "system_disk_persistent_read_bytes", map[string]string{"origin": "test-origin"}, "Bytes", 1000.0),
 		Entry("system_disk_persistent_write_bytes", "system_disk_persistent_write_bytes", map[string]string{"origin": "test-origin"}, "Bytes", 2000.0),
+		Entry("system_disk_persistent_read_count", "system_disk_persistent_read_count", map[string]string{"origin": "test-origin"}, "count", 101.0),
+		Entry("system_disk_persistent_write_count", "system_disk_persistent_write_count", map[string]string{"origin": "test-origin"}, "count", 201.0),
 		Entry("system_disk_persistent_read_time", "system_disk_persistent_read_time", map[string]string{"origin": "test-origin"}, "ms", 3000.0),
 		Entry("system_disk_persistent_write_time", "system_disk_persistent_write_time", map[string]string{"origin": "test-origin"}, "ms", 4000.0),
 		Entry("system_disk_persistent_io_time", "system_disk_persistent_io_time", map[string]string{"origin": "test-origin"}, "ms", 5000.0),
@@ -193,6 +199,8 @@ var _ = Describe("Prometheus Sender", func() {
 		Entry("system_disk_system_inode_percent", "system_disk_system_inode_percent", map[string]string{"origin": "test-origin"}, "Percent", true),
 		Entry("system_disk_system_read_bytes", "system_disk_system_read_bytes", map[string]string{"origin": "test-origin"}, "Bytes", false),
 		Entry("system_disk_system_write_bytes", "system_disk_system_write_bytes", map[string]string{"origin": "test-origin"}, "Bytes", false),
+		Entry("system_disk_system_read_count", "system_disk_system_read_count", map[string]string{"origin": "test-origin"}, "count", false),
+		Entry("system_disk_system_write_count", "system_disk_system_write_count", map[string]string{"origin": "test-origin"}, "count", false),
 		Entry("system_disk_system_read_time", "system_disk_system_read_time", map[string]string{"origin": "test-origin"}, "ms", false),
 		Entry("system_disk_system_write_time", "system_disk_system_write_time", map[string]string{"origin": "test-origin"}, "ms", false),
 		Entry("system_disk_system_io_time", "system_disk_system_io_time", map[string]string{"origin": "test-origin"}, "ms", false),
@@ -200,6 +208,8 @@ var _ = Describe("Prometheus Sender", func() {
 		Entry("system_disk_ephemeral_inode_percent", "system_disk_ephemeral_inode_percent", map[string]string{"origin": "test-origin"}, "Percent", true),
 		Entry("system_disk_ephemeral_read_bytes", "system_disk_ephemeral_read_bytes", map[string]string{"origin": "test-origin"}, "Bytes", false),
 		Entry("system_disk_ephemeral_write_bytes", "system_disk_ephemeral_write_bytes", map[string]string{"origin": "test-origin"}, "Bytes", false),
+		Entry("system_disk_ephemeral_read_count", "system_disk_ephemeral_read_count", map[string]string{"origin": "test-origin"}, "count", false),
+		Entry("system_disk_ephemeral_write_count", "system_disk_ephemeral_write_count", map[string]string{"origin": "test-origin"}, "count", false),
 		Entry("system_disk_ephemeral_read_time", "system_disk_ephemeral_read_time", map[string]string{"origin": "test-origin"}, "ms", false),
 		Entry("system_disk_ephemeral_write_time", "system_disk_ephemeral_write_time", map[string]string{"origin": "test-origin"}, "ms", false),
 		Entry("system_disk_ephemeral_io_time", "system_disk_ephemeral_io_time", map[string]string{"origin": "test-origin"}, "ms", false),
@@ -207,6 +217,8 @@ var _ = Describe("Prometheus Sender", func() {
 		Entry("system_disk_persistent_inode_percent", "system_disk_persistent_inode_percent", map[string]string{"origin": "test-origin"}, "Percent", true),
 		Entry("system_disk_persistent_read_bytes", "system_disk_persistent_read_bytes", map[string]string{"origin": "test-origin"}, "Bytes", false),
 		Entry("system_disk_persistent_write_bytes", "system_disk_persistent_write_bytes", map[string]string{"origin": "test-origin"}, "Bytes", false),
+		Entry("system_disk_persistent_read_count", "system_disk_persistent_read_count", map[string]string{"origin": "test-origin"}, "count", false),
+		Entry("system_disk_persistent_write_count", "system_disk_persistent_write_count", map[string]string{"origin": "test-origin"}, "count", false),
 		Entry("system_disk_persistent_read_time", "system_disk_persistent_read_time", map[string]string{"origin": "test-origin"}, "ms", false),
 		Entry("system_disk_persistent_write_time", "system_disk_persistent_write_time", map[string]string{"origin": "test-origin"}, "ms", false),
 		Entry("system_disk_persistent_io_time", "system_disk_persistent_io_time", map[string]string{"origin": "test-origin"}, "ms", false),
@@ -476,6 +488,8 @@ var _ = Describe("Prometheus Sender", func() {
 		Entry("system_disk_system_inode_percent", "system_disk_system_inode_percent", "test-origin", "Percent"),
 		Entry("system_disk_system_read_bytes", "system_disk_system_read_bytes", "test-origin", "Bytes"),
 		Entry("system_disk_system_write_bytes", "system_disk_system_write_bytes", "test-origin", "Bytes"),
+		Entry("system_disk_system_read_count", "system_disk_system_read_count", "test-origin", "count"),
+		Entry("system_disk_system_write_count", "system_disk_system_write_count", "test-origin", "count"),
 		Entry("system_disk_system_read_time", "system_disk_system_read_time", "test-origin", "ms"),
 		Entry("system_disk_system_write_time", "system_disk_system_write_time", "test-origin", "ms"),
 		Entry("system_disk_system_io_time", "system_disk_system_io_time", "test-origin", "ms"),
@@ -483,6 +497,8 @@ var _ = Describe("Prometheus Sender", func() {
 		Entry("system_disk_ephemeral_inode_percent", "system_disk_ephemeral_inode_percent", "test-origin", "Percent"),
 		Entry("system_disk_ephemeral_read_bytes", "system_disk_ephemeral_read_bytes", "test-origin", "Bytes"),
 		Entry("system_disk_ephemeral_write_bytes", "system_disk_ephemeral_write_bytes", "test-origin", "Bytes"),
+		Entry("system_disk_ephemeral_read_count", "system_disk_ephemeral_read_count", "test-origin", "count"),
+		Entry("system_disk_ephemeral_write_count", "system_disk_ephemeral_write_count", "test-origin", "count"),
 		Entry("system_disk_ephemeral_read_time", "system_disk_ephemeral_read_time", "test-origin", "ms"),
 		Entry("system_disk_ephemeral_write_time", "system_disk_ephemeral_write_time", "test-origin", "ms"),
 		Entry("system_disk_ephemeral_io_time", "system_disk_ephemeral_io_time", "test-origin", "ms"),
@@ -490,6 +506,8 @@ var _ = Describe("Prometheus Sender", func() {
 		Entry("system_disk_persistent_inode_percent", "system_disk_persistent_inode_percent", "test-origin", "Percent"),
 		Entry("system_disk_persistent_read_bytes", "system_disk_persistent_read_bytes", "test-origin", "Bytes"),
 		Entry("system_disk_persistent_write_bytes", "system_disk_persistent_write_bytes", "test-origin", "Bytes"),
+		Entry("system_disk_persistent_read_count", "system_disk_persistent_read_count", "test-origin", "count"),
+		Entry("system_disk_persistent_write_count", "system_disk_persistent_write_count", "test-origin", "count"),
 		Entry("system_disk_persistent_read_time", "system_disk_persistent_read_time", "test-origin", "ms"),
 		Entry("system_disk_persistent_write_time", "system_disk_persistent_write_time", "test-origin", "ms"),
 		Entry("system_disk_persistent_io_time", "system_disk_persistent_io_time", "test-origin", "ms"),

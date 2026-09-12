@@ -27,6 +27,8 @@ it will emit the following metrics about the VM where it is deployed:
 | system_disk_system_inode_percent     |   ✔️   |    ✔️    |
 | system_disk_system_read_bytes        |   ✔️   |    ✔️    |
 | system_disk_system_write_bytes       |   ✔️   |    ✔️    |
+| system_disk_system_read_count        |   ✔️   |    ✔️    |
+| system_disk_system_write_count       |   ✔️   |    ✔️    |
 | system_disk_system_read_time         |   ✔️   |    ✔️    |
 | system_disk_system_write_time        |   ✔️   |    ✔️    |
 | system_disk_system_io_time           |   ✔️   |    ✔️    |
@@ -34,6 +36,8 @@ it will emit the following metrics about the VM where it is deployed:
 | system_disk_ephemeral_inode_percent  |   ✔️   |    ✔️    |
 | system_disk_ephemeral_read_bytes     |   ✔️   |    ✔️    |
 | system_disk_ephemeral_write_bytes    |   ✔️   |    ✔️    |
+| system_disk_ephemeral_read_count     |   ✔️   |    ✔️    |
+| system_disk_ephemeral_write_count    |   ✔️   |    ✔️    |
 | system_disk_ephemeral_read_time      |   ✔️   |    ✔️    |
 | system_disk_ephemeral_write_time     |   ✔️   |    ✔️    |
 | system_disk_ephemeral_io_time        |   ✔️   |    ✔️    |
@@ -41,6 +45,8 @@ it will emit the following metrics about the VM where it is deployed:
 | system_disk_persistent_inode_percent |   ✔️   |    ✔️    |
 | system_disk_persistent_read_bytes    |   ✔️   |    ✔️    |
 | system_disk_persistent_write_bytes   |   ✔️   |    ✔️    |
+| system_disk_persistent_read_count    |   ✔️   |    ✔️    |
+| system_disk_persistent_write_count   |   ✔️   |    ✔️    |
 | system_disk_persistent_read_time     |   ✔️   |    ✔️    |
 | system_disk_persistent_write_time    |   ✔️   |    ✔️    |
 | system_disk_persistent_io_time       |   ✔️   |    ✔️    |

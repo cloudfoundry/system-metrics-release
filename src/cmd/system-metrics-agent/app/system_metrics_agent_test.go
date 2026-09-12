@@ -119,7 +119,7 @@ var _ = Describe("SystemMetricsAgent", func() {
 		Expect(resp.StatusCode).To(Equal(http.StatusOK))
 		body, err := io.ReadAll(resp.Body)
 		Expect(err).To(BeNil())
-		Expect(strings.Count(string(body), "\n")).To(Equal(126))
+		Expect(strings.Count(string(body), "\n")).To(Equal(144))
 	})
 
 	It("limits metrics emitted", func() {

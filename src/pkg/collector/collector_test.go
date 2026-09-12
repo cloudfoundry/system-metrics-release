@@ -181,6 +181,8 @@ var _ = Describe("Collector", func() {
 		Expect(stats.SystemDisk.InodePercent).To(Equal(75.0))
 		Expect(stats.SystemDisk.ReadBytes).To(Equal(uint64(100)))
 		Expect(stats.SystemDisk.WriteBytes).To(Equal(uint64(200)))
+		Expect(stats.SystemDisk.ReadCount).To(Equal(uint64(10)))
+		Expect(stats.SystemDisk.WriteCount).To(Equal(uint64(20)))
 		Expect(stats.SystemDisk.ReadTime).To(Equal(uint64(300)))
 		Expect(stats.SystemDisk.WriteTime).To(Equal(uint64(400)))
 		Expect(stats.SystemDisk.IOTime).To(Equal(uint64(500)))
@@ -190,6 +192,8 @@ var _ = Describe("Collector", func() {
 		Expect(stats.EphemeralDisk.InodePercent).To(Equal(95.0))
 		Expect(stats.EphemeralDisk.ReadBytes).To(Equal(uint64(1000)))
 		Expect(stats.EphemeralDisk.WriteBytes).To(Equal(uint64(2000)))
+		Expect(stats.EphemeralDisk.ReadCount).To(Equal(uint64(100)))
+		Expect(stats.EphemeralDisk.WriteCount).To(Equal(uint64(200)))
 		Expect(stats.EphemeralDisk.ReadTime).To(Equal(uint64(3000)))
 		Expect(stats.EphemeralDisk.WriteTime).To(Equal(uint64(4000)))
 		Expect(stats.EphemeralDisk.IOTime).To(Equal(uint64(5000)))
@@ -199,6 +203,8 @@ var _ = Describe("Collector", func() {
 		Expect(stats.PersistentDisk.InodePercent).To(Equal(115.0))
 		Expect(stats.PersistentDisk.ReadBytes).To(Equal(uint64(10000)))
 		Expect(stats.PersistentDisk.WriteBytes).To(Equal(uint64(20000)))
+		Expect(stats.PersistentDisk.ReadCount).To(Equal(uint64(1000)))
+		Expect(stats.PersistentDisk.WriteCount).To(Equal(uint64(2000)))
 		Expect(stats.PersistentDisk.ReadTime).To(Equal(uint64(30000)))
 		Expect(stats.PersistentDisk.WriteTime).To(Equal(uint64(40000)))
 		Expect(stats.PersistentDisk.IOTime).To(Equal(uint64(50000)))
@@ -215,6 +221,8 @@ var _ = Describe("Collector", func() {
 		Expect(stats.SystemDisk.InodePercent).To(Equal(75.0))
 		Expect(stats.SystemDisk.ReadBytes).To(Equal(uint64(100)))
 		Expect(stats.SystemDisk.WriteBytes).To(Equal(uint64(200)))
+		Expect(stats.SystemDisk.ReadCount).To(Equal(uint64(10)))
+		Expect(stats.SystemDisk.WriteCount).To(Equal(uint64(20)))
 		Expect(stats.SystemDisk.ReadTime).To(Equal(uint64(300)))
 		Expect(stats.SystemDisk.WriteTime).To(Equal(uint64(400)))
 		Expect(stats.SystemDisk.IOTime).To(Equal(uint64(500)))
@@ -224,6 +232,8 @@ var _ = Describe("Collector", func() {
 		Expect(stats.EphemeralDisk.InodePercent).To(Equal(95.0))
 		Expect(stats.EphemeralDisk.ReadBytes).To(Equal(uint64(1000)))
 		Expect(stats.EphemeralDisk.WriteBytes).To(Equal(uint64(2000)))
+		Expect(stats.EphemeralDisk.ReadCount).To(Equal(uint64(100)))
+		Expect(stats.EphemeralDisk.WriteCount).To(Equal(uint64(200)))
 		Expect(stats.EphemeralDisk.ReadTime).To(Equal(uint64(3000)))
 		Expect(stats.EphemeralDisk.WriteTime).To(Equal(uint64(4000)))
 		Expect(stats.EphemeralDisk.IOTime).To(Equal(uint64(5000)))
@@ -787,6 +797,8 @@ func (s *stubRawCollector) DiskIOCountersWithContext(_ context.Context, names ..
 			"sda1": disk.IOCountersStat{
 				ReadBytes:  100,
 				WriteBytes: 200,
+				ReadCount:  10,
+				WriteCount: 20,
 				ReadTime:   300,
 				WriteTime:  400,
 				IoTime:     500,
@@ -797,6 +809,8 @@ func (s *stubRawCollector) DiskIOCountersWithContext(_ context.Context, names ..
 			"sdb1": disk.IOCountersStat{
 				ReadBytes:  1000,
 				WriteBytes: 2000,
+				ReadCount:  100,
+				WriteCount: 200,
 				ReadTime:   3000,
 				WriteTime:  4000,
 				IoTime:     5000,
@@ -807,6 +821,8 @@ func (s *stubRawCollector) DiskIOCountersWithContext(_ context.Context, names ..
 			"sdb2": disk.IOCountersStat{
 				ReadBytes:  10000,
 				WriteBytes: 20000,
+				ReadCount:  1000,
+				WriteCount: 2000,
 				ReadTime:   30000,
 				WriteTime:  40000,
 				IoTime:     50000,
