@@ -77,6 +77,8 @@ type DiskStat struct {
 	InodePercent float64
 	ReadBytes    uint64
 	WriteBytes   uint64
+	ReadCount    uint64
+	WriteCount   uint64
 	ReadTime     uint64
 	WriteTime    uint64
 	IOTime       uint64
@@ -343,6 +345,8 @@ func (c Collector) diskStat(ctx context.Context, path string) (DiskStat, error) 
 		InodePercent: disk.InodesUsedPercent,
 		ReadBytes:    pStat[deviceName].ReadBytes,
 		WriteBytes:   pStat[deviceName].WriteBytes,
+		ReadCount:    pStat[deviceName].ReadCount,
+		WriteCount:   pStat[deviceName].WriteCount,
 		ReadTime:     pStat[deviceName].ReadTime,
 		WriteTime:    pStat[deviceName].WriteTime,
 		IOTime:       pStat[deviceName].IoTime,

@@ -206,6 +206,12 @@ func (p PromSender) setSystemDiskGauges(stats collector.SystemStat) {
 		gauge = p.registry.Get("system_disk_system_write_bytes", p.origin, "Bytes", labels)
 		gauge.Set(float64(stats.SystemDisk.WriteBytes))
 
+		gauge = p.registry.Get("system_disk_system_read_count", p.origin, "count", labels)
+		gauge.Set(float64(stats.SystemDisk.ReadCount))
+
+		gauge = p.registry.Get("system_disk_system_write_count", p.origin, "count", labels)
+		gauge.Set(float64(stats.SystemDisk.WriteCount))
+
 		gauge = p.registry.Get("system_disk_system_read_time", p.origin, "ms", labels)
 		gauge.Set(float64(stats.SystemDisk.ReadTime))
 
@@ -236,6 +242,12 @@ func (p PromSender) setEphemeralDiskGauges(stats collector.SystemStat) {
 		gauge = p.registry.Get("system_disk_ephemeral_write_bytes", p.origin, "Bytes", labels)
 		gauge.Set(float64(stats.EphemeralDisk.WriteBytes))
 
+		gauge = p.registry.Get("system_disk_ephemeral_read_count", p.origin, "count", labels)
+		gauge.Set(float64(stats.EphemeralDisk.ReadCount))
+
+		gauge = p.registry.Get("system_disk_ephemeral_write_count", p.origin, "count", labels)
+		gauge.Set(float64(stats.EphemeralDisk.WriteCount))
+
 		gauge = p.registry.Get("system_disk_ephemeral_read_time", p.origin, "ms", labels)
 		gauge.Set(float64(stats.EphemeralDisk.ReadTime))
 
@@ -265,6 +277,12 @@ func (p PromSender) setPersistentDiskGauges(stats collector.SystemStat) {
 
 		gauge = p.registry.Get("system_disk_persistent_write_bytes", p.origin, "Bytes", labels)
 		gauge.Set(float64(stats.PersistentDisk.WriteBytes))
+
+		gauge = p.registry.Get("system_disk_persistent_read_count", p.origin, "count", labels)
+		gauge.Set(float64(stats.PersistentDisk.ReadCount))
+
+		gauge = p.registry.Get("system_disk_persistent_write_count", p.origin, "count", labels)
+		gauge.Set(float64(stats.PersistentDisk.WriteCount))
 
 		gauge = p.registry.Get("system_disk_persistent_read_time", p.origin, "ms", labels)
 		gauge.Set(float64(stats.PersistentDisk.ReadTime))

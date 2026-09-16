@@ -77,6 +77,8 @@ var (
 
 			ReadBytes:  10,
 			WriteBytes: 20,
+			ReadCount:  1,
+			WriteCount: 2,
 			ReadTime:   30,
 			WriteTime:  40,
 			IOTime:     50,
@@ -90,6 +92,8 @@ var (
 
 			ReadBytes:  100,
 			WriteBytes: 200,
+			ReadCount:  11,
+			WriteCount: 21,
 			ReadTime:   300,
 			WriteTime:  400,
 			IOTime:     500,
@@ -103,6 +107,8 @@ var (
 
 			ReadBytes:  1000,
 			WriteBytes: 2000,
+			ReadCount:  101,
+			WriteCount: 201,
 			ReadTime:   3000,
 			WriteTime:  4000,
 			IOTime:     5000,
