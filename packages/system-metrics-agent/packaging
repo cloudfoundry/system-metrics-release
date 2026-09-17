@@ -4,3 +4,7 @@ source /var/vcap/packages/golang-1.27-linux/bosh/compile.env
 export GOPATH=/var/vcap
 
 go build -mod=vendor -o ${BOSH_INSTALL_TARGET}/system-metrics-agent ./cmd/system-metrics-agent
+
+mkdir -p ${BOSH_INSTALL_TARGET}/scripts
+cp scripts/privdrop_utils.sh ${BOSH_INSTALL_TARGET}/scripts/privdrop_utils.sh
+chmod +x ${BOSH_INSTALL_TARGET}/scripts/privdrop_utils.sh
