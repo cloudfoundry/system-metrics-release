@@ -64,6 +64,21 @@ describe 'loggr-system-metrics-agent' do
   describe 'bin/ctl' do
     let(:template) { job.template('bin/ctl') }
 
+    it 'sources privdrop_utils.sh from the system-metrics-agent package' do
+      rendered = template.render({})
+      expect(rendered).to include('source /var/vcap/packages/system-metrics-agent/scripts/privdrop_utils.sh')
+    end
+
+    it 'runs system-metrics-agent using run_as_vcap' do
+      rendered = template.render({})
+      expect(rendered).to match(/run_as_vcap \/var\/vcap\/packages\/system-metrics-agent\/system-metrics-agent &/)
+    end
+
+    it 'does not use chpst' do
+      rendered = template.render({})
+      expect(rendered).not_to include('chpst')
+    end
+
     it 'defaults CLOCK_DRIFT_ENABLED to false' do
       rendered = template.render({})
       expect(rendered).to include('CLOCK_DRIFT_ENABLED=false')
