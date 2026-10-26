@@ -1,6 +1,6 @@
 module code.cloudfoundry.org/system-metrics-release/src
 
-go 1.26.0
+go 1.27.3
 
 require (
 	code.cloudfoundry.org/go-envstruct v1.7.0
@@ -27,9 +27,9 @@ require (
 	github.com/power-devops/perfstat v0.0.0-20260916203055-22a1a467d9f0 // indirect
 	github.com/prometheus/client_model v0.6.3 // indirect
 	github.com/prometheus/common v0.72.1 // indirect
-	github.com/prometheus/procfs v0.22.0 // indirect
+	github.com/prometheus/procfs v0.23.0 // indirect
 	github.com/shoenig/go-m1cpu v0.2.4 // indirect
-	github.com/square/certstrap v1.4.0 // indirect
+	github.com/square/certstrap v1.4.1 // indirect
 	github.com/tklauser/go-sysconf v0.4.0 // indirect
 	github.com/tklauser/numcpus v0.12.0 // indirect
 	github.com/yusufpapurcu/wmi v1.2.4 // indirect
