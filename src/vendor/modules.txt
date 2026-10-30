@@ -1,8 +1,8 @@
 # code.cloudfoundry.org/go-envstruct v1.7.0
 ## explicit; go 1.21
 code.cloudfoundry.org/go-envstruct
-# code.cloudfoundry.org/tlsconfig v0.69.0
-## explicit; go 1.26.0
+# code.cloudfoundry.org/tlsconfig v0.70.0
+## explicit; go 1.27.3
 code.cloudfoundry.org/tlsconfig
 code.cloudfoundry.org/tlsconfig/certtest
 # filippo.io/edwards25519 v1.2.0
