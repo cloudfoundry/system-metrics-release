@@ -1,7 +1,7 @@
 code.cloudfoundry.org/go-envstruct v1.7.0 h1:6e90Z+lTPrI2jMJOoKErskL7a+Qm97GFiithcXeVWdk=
 code.cloudfoundry.org/go-envstruct v1.7.0/go.mod h1:xm6Eto/WB7Qq1iwEN29jUQXDeUCJ+nruwAnnrpY0s4E=
-code.cloudfoundry.org/tlsconfig v0.73.0 h1:6WB6kvdPG7A/xYLXsm1lwo/LXDrzNxFuCR+XwIjtao0=
-code.cloudfoundry.org/tlsconfig v0.73.0/go.mod h1:twFQQhC2Yat+LH8MYckpV5gfWMB127kfnqqlSN3FZ2k=
+code.cloudfoundry.org/tlsconfig v0.74.0 h1:X3SE2zSCNsRoegpGHGh3XrgAyL0AtARUphRq36cPK9s=
+code.cloudfoundry.org/tlsconfig v0.74.0/go.mod h1:907rmG2JczfH+ZIn4hp7gtPK7jY/yWbp8LIPpCd08Hk=
 filippo.io/edwards25519 v1.2.0 h1:crnVqOiS4jqYleHd9vaKZ+HKtHfllngJIiOpNpoJsjo=
 filippo.io/edwards25519 v1.2.0/go.mod h1:xzAOLCNug/yB62zG1bQ8uziwrIqIuxhctzJT18Q77mc=
 github.com/Masterminds/semver/v3 v3.5.0 h1:kQceYJfbupGfZOKZQg0kou0DgAKhzDg2NZPAwZ/2OOE=
